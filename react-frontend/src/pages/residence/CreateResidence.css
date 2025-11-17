@@ -1,0 +1,275 @@
+.create-residence-page {
+  min-height: 100vh;
+  background: #1a1d23;
+  padding: 20px;
+}
+
+.create-residence-page .card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.create-residence-page .card-header {
+  border-radius: 8px 8px 0 0;
+  padding: 20px 28px;
+}
+
+.create-residence-page .card-body {
+  padding: 28px;
+  background: #ffffff;
+  color: #333;
+}
+
+.create-residence-page .card-footer {
+  padding: 20px 28px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  border-radius: 0 0 8px 8px;
+}
+
+.create-residence-page .form-label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.create-residence-page .form-control,
+.create-residence-page .form-select {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px !important;
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+  font-family: var(--app-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.create-residence-page .form-control:hover,
+.create-residence-page .form-select:hover {
+  border-color: #9ca3af;
+}
+
+.create-residence-page .form-control:focus,
+.create-residence-page .form-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+}
+
+.create-residence-page .form-control::placeholder,
+.create-residence-page .form-select::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.create-residence-page .form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.create-residence-page .form-select:focus {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%232563eb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.create-residence-page .form-select option {
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+  padding: 8px 12px;
+}
+
+/* Override any dark theme styles */
+.create-residence-page .card.bg-gray-800 .form-control,
+.create-residence-page .card.bg-gray-800 .form-select {
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+}
+
+.create-residence-page .card.bg-gray-800 .form-control:focus,
+.create-residence-page .card.bg-gray-800 .form-select:focus {
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+}
+
+.create-residence-page .card.bg-gray-800 .form-control::placeholder {
+  color: #9ca3af !important;
+}
+
+.create-residence-page .alert {
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+
+.create-residence-page .progress {
+  height: 4px;
+  border-radius: 0;
+  background-color: #e5e7eb;
+}
+
+.create-residence-page .progress-bar {
+  transition: width 0.3s ease;
+}
+
+.create-residence-page .btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.create-residence-page .btn-primary {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.create-residence-page .btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.create-residence-page .btn-success {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.create-residence-page .btn-success:hover {
+  background: #059669;
+  border-color: #059669;
+  transform: translateY(-1px);
+}
+
+.create-residence-page .btn-secondary {
+  background: #6b7280;
+  border-color: #6b7280;
+}
+
+.create-residence-page .btn-secondary:hover {
+  background: #4b5563;
+  border-color: #4b5563;
+}
+
+.create-residence-page .form-check-input:checked {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.create-residence-page .card.border-primary {
+  border-color: #2563eb !important;
+}
+
+.create-residence-page .text-primary {
+  color: #2563eb !important;
+}
+
+.create-residence-page .text-danger {
+  color: #dc2626 !important;
+}
+
+.create-residence-page .text-muted {
+  color: #6b7280 !important;
+}
+
+/* Responsive form controls */
+@media (max-width: 768px) {
+  .create-residence-page .form-control,
+  .create-residence-page .form-select {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+  }
+}
+
+/* Ensure form controls are visible and interactive */
+.create-residence-page .form-control:disabled,
+.create-residence-page .form-select:disabled {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Input group styling */
+.create-residence-page .input-group .form-control {
+  font-size: 12px !important;
+}
+
+.create-residence-page .input-group-text {
+  font-size: 12px;
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+/* Searchable Dropdown Styles */
+.create-residence-page .searchable-dropdown {
+  position: relative;
+}
+
+.create-residence-page .searchable-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-height: 300px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-top: 4px;
+}
+
+.create-residence-page .searchable-dropdown-search {
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.create-residence-page .searchable-dropdown-search input {
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+  border: 1px solid #d1d5db;
+}
+
+.create-residence-page .searchable-dropdown-options {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.create-residence-page .searchable-dropdown-option {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  color: #2d353c;
+}
+
+.create-residence-page .searchable-dropdown-option:hover {
+  background-color: #f5f5f5;
+}
+
+.create-residence-page .searchable-dropdown-option.selected {
+  background-color: #e3f2fd;
+}
+
+.create-residence-page .searchable-dropdown-option-name {
+  font-weight: 600;
+  color: #2d353c;
+  font-size: 12px;
+}
+
+.create-residence-page .searchable-dropdown-option-phone {
+  color: #6b7280;
+  font-size: 11px;
+  margin-top: 2px;
+}
+

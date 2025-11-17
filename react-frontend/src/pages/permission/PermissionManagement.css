@@ -1,0 +1,338 @@
+.permission-management-page {
+  padding: 12px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.permission-management-page .card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.permission-management-page .card-header {
+  padding: 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.permission-management-page .card-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.permission-management-page .card-body {
+  padding: 16px;
+}
+
+.permission-management-page .filter-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.permission-management-page .select-role {
+  flex: 1;
+  max-width: 400px;
+}
+
+.permission-management-page .button-group {
+  display: flex;
+  gap: 12px;
+}
+
+.permission-management-page .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.permission-management-page .btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.permission-management-page .btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.permission-management-page .btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.permission-management-page .btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.permission-management-page .btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.permission-management-page .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.permission-management-page .table-section {
+  margin-top: 16px;
+}
+
+.permission-management-page .table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.permission-management-page .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.permission-management-page .table thead {
+  background: #1f2937;
+  color: white;
+}
+
+.permission-management-page .table thead th {
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+}
+
+.permission-management-page .table tbody td,
+.permission-management-page .table tbody th {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  font-size: 14px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.permission-management-page .table tbody td:first-child,
+.permission-management-page .table tbody th:first-child {
+  white-space: normal;
+}
+
+.permission-management-page .table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.permission-management-page .table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.permission-management-page .form-check {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.permission-management-page .form-check.hidden {
+  visibility: hidden;
+}
+
+.permission-management-page .form-check-input {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+}
+
+.permission-management-page .form-check-input:checked {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.permission-management-page .form-check-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.permission-management-page .me-1 {
+  margin-right: 4px;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 992px) {
+  .permission-management-page {
+    padding: 10px;
+  }
+
+  .permission-management-page .card-body {
+    padding: 14px;
+  }
+
+  .permission-management-page .card-header {
+    padding: 14px;
+  }
+
+  .permission-management-page .table thead th {
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+
+  .permission-management-page .table tbody td,
+  .permission-management-page .table tbody th {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .permission-management-page {
+    padding: 12px;
+  }
+
+  .permission-management-page .card {
+    border-radius: 8px;
+  }
+
+  .permission-management-page .card-header {
+    padding: 16px;
+  }
+
+  .permission-management-page .card-header h1 {
+    font-size: 22px;
+  }
+
+  .permission-management-page .card-body {
+    padding: 16px;
+  }
+
+  .permission-management-page .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .permission-management-page .select-role {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .permission-management-page .button-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .permission-management-page .button-group .btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+    justify-content: center;
+  }
+
+  .permission-management-page .table-section {
+    margin-top: 20px;
+  }
+
+  .permission-management-page .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 6px;
+  }
+
+  .permission-management-page .table {
+    min-width: 700px;
+  }
+
+  .permission-management-page .table thead th {
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  .permission-management-page .table tbody td,
+  .permission-management-page .table tbody th {
+    padding: 10px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .permission-management-page .table tbody td:first-child,
+  .permission-management-page .table tbody th:first-child {
+    white-space: normal;
+  }
+
+  .permission-management-page .form-check-input {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 480px) {
+  .permission-management-page {
+    padding: 8px;
+  }
+
+  .permission-management-page .card-header {
+    padding: 12px;
+  }
+
+  .permission-management-page .card-header h1 {
+    font-size: 20px;
+  }
+
+  .permission-management-page .card-body {
+    padding: 12px;
+  }
+
+  .permission-management-page .filter-row {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .permission-management-page .button-group {
+    gap: 8px;
+  }
+
+  .permission-management-page .table {
+    min-width: 650px;
+  }
+
+  .permission-management-page .table thead th {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  .permission-management-page .table tbody td,
+  .permission-management-page .table tbody th {
+    padding: 8px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .permission-management-page .table tbody td:first-child,
+  .permission-management-page .table tbody th:first-child {
+    white-space: normal;
+  }
+
+  .permission-management-page .form-check-input {
+    width: 16px;
+    height: 16px;
+  }
+}
+

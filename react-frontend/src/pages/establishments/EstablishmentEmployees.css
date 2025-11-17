@@ -1,0 +1,40 @@
+.establishment-employees-page {
+  padding: 20px;
+}
+
+.establishment-employees-page .card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.establishment-employees-page .card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.establishment-employees-page .media {
+  display: flex;
+  align-items: center;
+}
+
+.establishment-employees-page .media img {
+  border-radius: 50%;
+}
+
+.establishment-employees-page .progress {
+  height: 20px;
+  background-color: #e9ecef;
+}
+
+.establishment-employees-page .progress-bar {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.establishment-employees-page .fs-10px {
+  font-size: 10px;
+}
+
+
+
+

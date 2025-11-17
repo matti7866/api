@@ -1,0 +1,145 @@
+.company-documents-container {
+  padding: 20px;
+}
+
+.company-documents-container .panel {
+  margin-bottom: 20px;
+}
+
+.company-documents-container .panel-heading {
+  background-color: #2d353c;
+  color: white;
+  padding: 15px 20px;
+  border-bottom: 1px solid #1a1f24;
+}
+
+.company-documents-container .panel-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.company-documents-container .panel-body {
+  padding: 20px;
+  background-color: white;
+}
+
+#jstree-drag-and-drop {
+  min-height: 400px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+/* jstree custom styles */
+.jstree-default .jstree-node {
+  min-height: 24px;
+  line-height: 24px;
+  margin-left: 24px;
+  min-width: 24px;
+}
+
+.jstree-default .jstree-anchor {
+  line-height: 24px;
+  height: 24px;
+  padding: 0 4px 0 1px;
+}
+
+.jstree-default .jstree-icon {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.jstree-default .jstree-clicked {
+  background: #e8f4f8;
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px #999;
+}
+
+.jstree-default .jstree-hovered {
+  background: #e8f4f8;
+  border-radius: 2px;
+}
+
+/* Modal styles */
+.modal.show {
+  display: block !important;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 1.75rem auto;
+  max-width: 500px;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: calc(0.3rem - 1px);
+  border-top-right-radius: calc(0.3rem - 1px);
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.75rem;
+  border-top: 1px solid #dee2e6;
+  border-bottom-right-radius: calc(0.3rem - 1px);
+  border-bottom-left-radius: calc(0.3rem - 1px);
+}
+
+.btn-close {
+  padding: 0.5rem 0.5rem;
+  margin: -0.5rem -0.5rem -0.5rem auto;
+  background: transparent;
+  border: 0;
+  border-radius: 0.25rem;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.btn-close:hover {
+  opacity: 0.75;
+}
+
+.btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+

@@ -1,0 +1,238 @@
+/* Residence Detail Page Styles */
+
+.residence-detail-page {
+  min-height: 100vh;
+  background: #1a1d23;
+  padding: 20px;
+}
+
+.residence-detail-page .card {
+  background-color: #2d353c !important;
+  border: 1px solid #495057;
+  border-radius: 8px;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.residence-detail-page .card-body {
+  background-color: #2d353c !important;
+  color: #ffffff;
+}
+
+.residence-detail-page .card-header {
+  background-color: #343a40 !important;
+  color: #ffffff;
+  border-bottom: 1px solid #495057;
+}
+
+/* Form Controls */
+.residence-detail-page .form-control,
+.residence-detail-page .form-select,
+.residence-detail-page .input-field {
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px !important;
+}
+
+.residence-detail-page .form-control:focus,
+.residence-detail-page .form-select:focus,
+.residence-detail-page .input-field:focus {
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.residence-detail-page .form-control::placeholder,
+.residence-detail-page .form-select::placeholder {
+  color: #9ca3af !important;
+}
+
+.residence-detail-page .form-select option {
+  background-color: #ffffff !important;
+  color: #2d353c !important;
+}
+
+/* Text Colors */
+.residence-detail-page .text-white {
+  color: #ffffff !important;
+}
+
+.residence-detail-page .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+.residence-detail-page .text-gray-300 {
+  color: #d1d5db !important;
+}
+
+.residence-detail-page .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* Step Cards */
+.residence-detail-page .step-card {
+  background-color: #2d353c !important;
+  border: 1px solid #495057;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.residence-detail-page .step-card-header {
+  background-color: #343a40 !important;
+  padding: 16px;
+  border-bottom: 1px solid #495057;
+}
+
+.residence-detail-page .step-card-content {
+  background-color: #2d353c !important;
+  padding: 16px;
+}
+
+.residence-detail-page .step-card-content.bg-gray-900\/30 {
+  background-color: #1a1d23 !important;
+}
+
+/* Buttons */
+.residence-detail-page .btn {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.residence-detail-page .btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.residence-detail-page .btn-success {
+  background-color: #10b981;
+}
+
+.residence-detail-page .btn-success:hover {
+  background-color: #059669;
+}
+
+.residence-detail-page .btn-secondary {
+  background-color: #6b7280;
+}
+
+.residence-detail-page .btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+.residence-detail-page .btn-danger {
+  background-color: #dc2626;
+}
+
+.residence-detail-page .btn-danger:hover {
+  background-color: #b91c1c;
+}
+
+/* Labels */
+.residence-detail-page label {
+  color: #d1d5db !important;
+  font-weight: 500;
+}
+
+/* Progress Bar */
+.residence-detail-page .progress-bar-container {
+  background-color: #374151;
+  border-radius: 9999px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.residence-detail-page .progress-bar-fill {
+  background: linear-gradient(to right, #dc2626, #991b1b);
+  height: 100%;
+  transition: width 0.5s ease;
+  border-radius: 9999px;
+}
+
+/* Status Badges */
+.residence-detail-page .badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.residence-detail-page .badge.bg-green-600 {
+  background-color: #16a34a !important;
+  color: #ffffff;
+}
+
+.residence-detail-page .badge.bg-blue-600 {
+  background-color: #2563eb !important;
+  color: #ffffff;
+}
+
+.residence-detail-page .badge.bg-red-600 {
+  background-color: #dc2626 !important;
+  color: #ffffff;
+}
+
+.residence-detail-page .badge.bg-yellow-600 {
+  background-color: #ca8a04 !important;
+  color: #ffffff;
+}
+
+/* Grid and Layout */
+.residence-detail-page .grid {
+  display: grid;
+}
+
+.residence-detail-page .gap-2 {
+  gap: 8px;
+}
+
+.residence-detail-page .gap-4 {
+  gap: 16px;
+}
+
+.residence-detail-page .gap-6 {
+  gap: 24px;
+}
+
+.residence-detail-page .space-y-4 > * + * {
+  margin-top: 16px;
+}
+
+/* Ensure all text is readable */
+.residence-detail-page h1,
+.residence-detail-page h2,
+.residence-detail-page h3,
+.residence-detail-page h4,
+.residence-detail-page h5,
+.residence-detail-page h6 {
+  color: #ffffff !important;
+}
+
+.residence-detail-page p {
+  color: #d1d5db !important;
+}
+
+/* Input groups */
+.residence-detail-page .input-group {
+  display: flex;
+}
+
+.residence-detail-page .input-group-text {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+  border: 1px solid #495057;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+

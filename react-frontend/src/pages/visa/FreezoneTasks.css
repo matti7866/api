@@ -1,0 +1,232 @@
+/* Freezone Tasks Page Styles - Matching Residence Tasks */
+
+.freezone-tasks-page {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding: 24px;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.freezone-tasks-page .card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px;
+  color: #000000 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.freezone-tasks-page .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: #d1d5db !important;
+}
+
+.freezone-tasks-page .card-header {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  padding: 16px 20px !important;
+  font-weight: 700;
+  border-radius: 12px 12px 0 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+
+.freezone-tasks-page .card-body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 20px !important;
+}
+
+/* Step Navigation */
+.freezone-tasks-page .btn-group-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.freezone-tasks-page .btn-group-block .btn {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  padding: 10px 8px;
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+  border: 1px solid #444444 !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.freezone-tasks-page .btn-group-block .btn:hover {
+  background: #333333 !important;
+  color: #ffffff !important;
+  border-color: #555555 !important;
+  transform: translateY(-1px);
+}
+
+.freezone-tasks-page .btn-group-block .btn.active {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+  font-weight: 700;
+}
+
+.freezone-tasks-page .btn-group-block .btn span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.freezone-tasks-page .badge.bg-red {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* Table Styles */
+.freezone-tasks-page .table {
+  width: 100%;
+  color: #000000 !important;
+  background-color: transparent;
+}
+
+.freezone-tasks-page .table thead th {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: none !important;
+  font-weight: 700;
+  padding: 14px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.freezone-tasks-page .table tbody td {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #e5e7eb !important;
+  padding: 14px;
+  font-size: 13px;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+
+.freezone-tasks-page .table tbody tr:hover {
+  background-color: #f9fafb !important;
+}
+
+.freezone-tasks-page .table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.freezone-tasks-page .btn {
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.freezone-tasks-page .btn-sm {
+  padding: 6px 12px;
+  font-size: 11px;
+}
+
+.freezone-tasks-page .btn-primary {
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #333333;
+}
+
+.freezone-tasks-page .btn-primary:hover {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.freezone-tasks-page .btn-success {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.freezone-tasks-page .btn-success:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+.freezone-tasks-page .btn-danger {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.freezone-tasks-page .btn-danger:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.freezone-tasks-page .btn-info {
+  background-color: #06b6d4;
+  color: #ffffff;
+}
+
+.freezone-tasks-page .btn-info:hover {
+  background-color: #0891b2;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .freezone-tasks-page {
+    padding: 12px;
+  }
+  
+  .freezone-tasks-page .btn-group-block .btn {
+    font-size: 10px;
+    padding: 8px 6px;
+  }
+  
+  .freezone-tasks-page .table thead th,
+  .freezone-tasks-page .table tbody td {
+    font-size: 11px;
+    padding: 10px;
+  }
+  
+  .pagination-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .pagination-container > div {
+    justify-content: center !important;
+  }
+}
+
+
+
+

@@ -1,0 +1,30 @@
+.ledger-modal .payment {
+  background-color: #d4edda !important;
+}
+
+.ledger-modal .fine {
+  background-color: #fff3cd !important;
+}
+
+.ledger-modal .fine_payment {
+  background-color: #cfe2ff !important;
+}
+
+.ledger-modal table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media print {
+  .ledger-modal .modal-header,
+  .ledger-modal .modal-footer {
+    display: none;
+  }
+  
+  .ledger-modal .modal-body {
+    padding: 0;
+  }
+}
+
+
+
+
