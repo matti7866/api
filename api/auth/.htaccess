@@ -1,0 +1,35 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# CORS is handled by individual PHP files to support credentials
+# Do NOT set CORS headers here - let PHP handle them
+
+# Do NOT intercept OPTIONS requests - let PHP handle them
+
+# Route /send-otp to send-otp.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^send-otp$ send-otp.php [L,QSA]
+
+# Route /verify-otp to verify-otp.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^verify-otp$ verify-otp.php [L,QSA]
+
+# Route other files - add .php extension if not present
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+
+
+
+
+
+
+
+
+
+
+
