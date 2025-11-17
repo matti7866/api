@@ -996,7 +996,10 @@ export default function FileManager() {
             {!searchQuery && (
               <button
                 className="btn-action btn-primary"
-                onClick={() => setShowCreateModal(true)}
+                onClick={() => {
+                  setIsPublicFolder(false);
+                  setShowCreateModal(true);
+                }}
               >
                 <i className="fa fa-folder-plus"></i>
                 Create Folder
@@ -1177,11 +1180,17 @@ export default function FileManager() {
 
       {/* Create Folder Modal */}
       {showCreateModal && (
-        <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+        <div className="modal-overlay" onClick={() => {
+          setIsPublicFolder(false);
+          setShowCreateModal(false);
+        }}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Create New Folder</h3>
-              <button className="modal-close" onClick={() => setShowCreateModal(false)}>
+              <button className="modal-close" onClick={() => {
+                setIsPublicFolder(false);
+                setShowCreateModal(false);
+              }}>
                 <i className="fa fa-times"></i>
               </button>
             </div>
@@ -1225,7 +1234,10 @@ export default function FileManager() {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setShowCreateModal(false)}>
+              <button className="btn-secondary" onClick={() => {
+                setIsPublicFolder(false);
+                setShowCreateModal(false);
+              }}>
                 Cancel
               </button>
               <button

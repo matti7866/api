@@ -246,6 +246,164 @@ const residenceService = {
   },
 
   /**
+   * Get family residences list
+   */
+  async getFamilyResidences(filters: { step?: string; page?: number; limit?: number; search?: string; getAll?: boolean } = {}) {
+    const params: any = {};
+    // Always pass step parameter, including 'all'
+    if (filters.step) {
+      params.step = filters.step;
+    } else {
+      params.step = 'all'; // Default to 'all' if not specified
+    }
+    if (filters.search) {
+      params.search = filters.search;
+    }
+    
+    const response = await axios.get('/residence/family-tasks.php', { params });
+    
+    console.log('Family residences API response:', response.data);
+    
+    let families = response.data.families || response.data.data || [];
+    
+    console.log('Parsed families array:', families.length, 'records');
+    
+    // If getAll is true, return all records without pagination
+    if (filters.getAll) {
+      return {
+        data: families,
+        total: families.length,
+        page: 1,
+        limit: families.length,
+        totalPages: 1
+      };
+    }
+    
+    // Apply pagination if needed
+    if (filters.page && filters.limit) {
+      const startIndex = (filters.page - 1) * filters.limit;
+      const endIndex = startIndex + filters.limit;
+      const paginatedFamilies = families.slice(startIndex, endIndex);
+      const totalPages = Math.ceil(families.length / filters.limit);
+      
+      return {
+        data: paginatedFamilies,
+        total: families.length,
+        page: filters.page,
+        limit: filters.limit,
+        totalPages: totalPages
+      };
+    }
+    
+    return {
+      data: families,
+      total: families.length,
+      page: 1,
+      limit: families.length,
+      totalPages: 1
+    };
+  },
+
+  /**
+   * Get payment history for a family residence
+   */
+  async getFamilyPaymentHistory(familyResidenceID: number): Promise<PaymentHistory[]> {
+    const response = await axios.get('/residence/payment-history.php', {
+      params: { residenceID: familyResidenceID, type: 'family' }
+    });
+    // Handle different response formats
+    if (response.data.success && response.data.data) {
+      return Array.isArray(response.data.data) ? response.data.data : [];
+    }
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    if (response.data.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+    return [];
+  },
+
+  /**
+   * Process payment for family residence
+   */
+  async processFamilyPayment(data: {
+    familyResidenceID: number;
+    paymentAmount: number;
+    accountID: number;
+    remarks: string;
+  }) {
+    const response = await axios.post('/residence/family-payment.php', data);
+    return response.data;
+  },
+
+  /**
+   * Get attachments for a family residence
+   */
+  async getFamilyAttachments(familyResidenceID: number) {
+    const response = await axios.get('/residence/family-attachments.php', {
+      params: { residence_id: familyResidenceID }
+    });
+    // Handle different response formats
+    if (response.data.success && response.data.data) {
+      return Array.isArray(response.data.data) ? response.data.data : [];
+    }
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    if (response.data.data && Array.isArray(response.data.data)) {
+      return response.data.data;
+    }
+    return [];
+  },
+
+  /**
+   * Upload attachment for a family residence
+   */
+  async uploadFamilyAttachment(familyResidenceID: number, documentType: string, file: File) {
+    const formData = new FormData();
+    formData.append('residence_id', familyResidenceID.toString());
+    // Map document_type back to file_type for API compatibility
+    const docTypeToFileType: Record<string, string> = {
+      'passport': '1',
+      'photo': '11',
+      'id_front': '12',
+      'id_back': '13',
+      'other': '14'
+    };
+    const fileType = docTypeToFileType[documentType] || '14';
+    formData.append('file_type', fileType);
+    formData.append('file', file);
+    
+    const response = await axios.post('/residence/upload-family-attachment.php', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  },
+
+  /**
+   * Delete attachment for a family residence
+   */
+  async deleteFamilyAttachment(attachmentId: number) {
+    const response = await axios.delete('/residence/family-attachments.php', {
+      params: { id: attachmentId }
+    });
+    return response.data;
+  },
+
+  /**
+   * Get dependents (family residences) by main residence ID
+   */
+  async getDependentsByResidence(residenceID: number) {
+    const response = await axios.get('/residence/family-tasks.php', {
+      params: { step: 'all', main_residence_id: residenceID }
+    });
+    return response.data.families || response.data.data || [];
+  },
+
+  /**
    * Get financial breakdown for a residence
    */
   async getFinancialBreakdown(residenceID: number): Promise<FinancialBreakdown> {

@@ -58,6 +58,20 @@ html, body, #root {
   padding-left: var(--app-sidebar-minified-width);
 }
 
+/* Remove sidebar padding on mobile - sidebar overlays instead */
+@media (max-width: 768px) {
+  .app.app-sidebar-fixed,
+  .app.app-sidebar-minified {
+    padding-left: 0 !important;
+  }
+  
+  /* Ensure header is full width on mobile */
+  .app.app-header-fixed .app-header {
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
 .app.app-header-fixed .app-header {
   position: fixed;
   top: 0;
@@ -145,6 +159,34 @@ html, body, #root {
 @media (max-width: 767px) {
   .app-header .navbar-mobile-toggler {
     display: block;
+  }
+  
+  /* Mobile header improvements */
+  .app-header {
+    padding: 0 8px !important;
+  }
+  
+  .app-header .navbar-nav {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .app-header .navbar-item {
+    padding: 0 2px !important;
+    flex-shrink: 0;
+  }
+  
+  /* Hide some navbar items on very small screens */
+  @media (max-width: 480px) {
+    /* Keep only essential items visible */
+    .app-header .navbar-item:not(.navbar-user):not(:first-child) {
+      display: none;
+    }
+    
+    /* Ensure user menu stays visible */
+    .app-header .navbar-item.navbar-user {
+      display: flex !important;
+    }
   }
 }
 
@@ -463,11 +505,136 @@ html, body, #root {
   border-right: 2px solid var(--primary-red) !important;
   box-shadow: 4px 0 20px rgba(220, 38, 38, 0.15) !important;
   z-index: 1010;
-  transition: none !important;
+  transition: width 0.3s ease, transform 0.3s ease !important;
+  transform: translateX(0);
+  overflow: hidden;
 }
 
 .app-sidebar-minified .app-sidebar {
   width: var(--app-sidebar-minified-width);
+}
+
+/* Minified Sidebar Styles - Hide text and show only icons */
+.app-sidebar-minified .app-sidebar .menu-text,
+.app-sidebar-minified .app-sidebar .menu-caret,
+.app-sidebar-minified .app-sidebar .menu-profile-info,
+.app-sidebar-minified .app-sidebar .menu-submenu,
+.app-sidebar-minified .app-sidebar .menu-badge,
+.app-sidebar-minified .app-sidebar .menu-header {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  display: none !important;
+}
+
+.app-sidebar-minified .app-sidebar .menu-profile {
+  padding: 8px !important;
+  margin: 8px !important;
+  transition: padding 0.3s ease, margin 0.3s ease;
+}
+
+.app-sidebar-minified .app-sidebar .menu-profile-image {
+  margin-bottom: 0 !important;
+}
+
+.app-sidebar-minified .app-sidebar .menu-link {
+  justify-content: center !important;
+  padding: 12px 8px !important;
+  transition: padding 0.3s ease, justify-content 0.3s ease;
+}
+
+.app-sidebar-minified .app-sidebar .menu-icon {
+  margin: 0 auto !important;
+}
+
+.app-sidebar-minified .app-sidebar .menu-item {
+  text-align: center;
+}
+
+.app-sidebar-minified .app-sidebar .app-sidebar-minify-btn {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* Smooth transitions for menu elements */
+.app-sidebar .menu-text,
+.app-sidebar .menu-caret,
+.app-sidebar .menu-profile-info,
+.app-sidebar .menu-submenu,
+.app-sidebar .menu-badge,
+.app-sidebar .menu-header {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Ensure sidebar can collapse/expand properly on desktop */
+@media (min-width: 769px) {
+  .app-sidebar {
+    transform: translateX(0) !important;
+  }
+  
+  .app-sidebar-minified .app-sidebar {
+    transform: translateX(0) !important;
+  }
+}
+
+/* Mobile Sidebar Styles */
+.app-sidebar-mobile-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1009;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile Responsive - Hide sidebar by default on mobile */
+@media (max-width: 768px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease !important;
+    z-index: 1010;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .app-sidebar-mobile-toggled .app-sidebar {
+    transform: translateX(0);
+  }
+
+  .app-sidebar-minified .app-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .app-sidebar-mobile-toggled.app-sidebar-minified .app-sidebar {
+    transform: translateX(0);
+  }
+  
+  /* Ensure content area is full width on mobile */
+  .app-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Ensure header navbar items are responsive */
+  .app-header .navbar-nav {
+    flex-wrap: wrap;
+  }
+  
+  .app-header .navbar-item {
+    margin: 2px 4px;
+  }
 }
 
 .app-sidebar .app-sidebar-content {
@@ -559,11 +726,12 @@ html, body, #root {
   padding: 8px 15px; /* Reduced from 12px 20px */
   color: rgba(255, 255, 255, 0.9) !important;
   text-decoration: none;
+  transition: padding 0.3s ease, justify-content 0.3s ease, background 0.2s ease;
+  white-space: nowrap;
   border-radius: 10px !important; /* Reduced from 12px */
   margin: 3px 12px !important; /* Reduced from 4px 16px */
   position: relative !important;
   overflow: hidden !important;
-  transition: none !important;
   font-size: 13px; /* Explicit font size */
 }
 
@@ -668,7 +836,15 @@ html, body, #root {
 
 @media (max-width: 768px) {
   .app-content {
-    padding: 1px 3px; /* Minimal top/bottom, keep side padding */
+    padding: 1px 3px !important; /* Minimal top/bottom, keep side padding */
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  .app-content .container-fluid {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
 }
 

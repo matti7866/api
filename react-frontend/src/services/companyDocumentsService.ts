@@ -41,9 +41,8 @@ class CompanyDocumentsService {
       const formData = new FormData();
       formData.append('CreateFolder', 'createFolder');
       formData.append('Foler_Name', data.Foler_Name);
-      if (data.isPublic !== undefined) {
-        formData.append('isPublic', data.isPublic);
-      }
+      // Always send isPublic value - default to '0' (private) if not provided
+      formData.append('isPublic', data.isPublic !== undefined ? data.isPublic : '0');
 
       const response = await axios.post(
         `${this.baseUrl}/company_documentsController.php`,

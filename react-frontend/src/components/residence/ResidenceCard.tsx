@@ -23,6 +23,7 @@ interface ResidenceCardProps {
   onDeleteResidence?: (residence: Residence) => void;
   onCancelResidence?: (residence: Residence) => void;
   onRenew?: (residence: Residence) => void;
+  onDependents?: (residence: Residence) => void;
   isAdmin?: boolean;
 }
 
@@ -48,6 +49,7 @@ export default function ResidenceCard({
   onDeleteResidence,
   onCancelResidence,
   onRenew,
+  onDependents,
   isAdmin = false
 }: ResidenceCardProps) {
   // Calculate financial summary first - ensure all values are numbers
@@ -114,13 +116,14 @@ export default function ResidenceCard({
       className="card residence-card" 
       style={{ 
         backgroundColor: '#2d353c',
+        overflow: 'visible',
         border: '1px solid #495057',
         borderRadius: '8px',
         marginBottom: '24px',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
       }}
     >
-      <div className="card-body p-4">
+      <div className="card-body p-4" style={{ overflow: 'visible' }}>
         {/* Header with name and progress indicator - match old app exactly */}
         <div className="row mb-3 align-items-center">
           <div className="col-md-8">
@@ -245,16 +248,16 @@ export default function ResidenceCard({
                 {/* ILOE Fine if exists */}
                 {hasILOEFine && (
                   <div className="mb-2">
-                    <strong className="text-white">ILOE Fine:</strong> <span className="text-danger">{iloeFine.toLocaleString()} AED</span>
+                    <strong className="text-white">ILOE Fine:</strong> <span style={{ color: '#ef4444', fontWeight: '600' }}>{iloeFine.toLocaleString()} AED</span>
                   </div>
                 )}
 
                 {/* E-Visa Fine if exists */}
                 {totalFine > 0 && (
                   <div className="mb-2">
-                    <strong className="text-white">E-Visa Fine:</strong> <span className="text-danger">{totalFine.toLocaleString()} {residence.sale_currency_name}</span>
+                    <strong className="text-white">E-Visa Fine:</strong> <span style={{ color: '#ef4444', fontWeight: '600' }}>{totalFine.toLocaleString()} {residence.sale_currency_name}</span>
                     {totalFinePaid > 0 && (
-                      <small className="text-muted ms-2">(Paid: {totalFinePaid.toLocaleString()})</small>
+                      <small style={{ color: '#9ca3af' }} className="ms-2">(Paid: {totalFinePaid.toLocaleString()})</small>
                     )}
                   </div>
                 )}
@@ -262,7 +265,7 @@ export default function ResidenceCard({
                 {/* Custom Charges if exists */}
                 {customChargesTotal > 0 && (
                   <div className="mb-2">
-                    <strong className="text-white">Custom Charges:</strong> <span className="text-warning">{customChargesTotal.toLocaleString()} {residence.sale_currency_name}</span>
+                    <strong className="text-white">Custom Charges:</strong> <span style={{ color: '#fbbf24', fontWeight: '600' }}>{customChargesTotal.toLocaleString()} {residence.sale_currency_name}</span>
                   </div>
                 )}
 
@@ -437,8 +440,20 @@ export default function ResidenceCard({
                     </button>
                   )}
 
+                  {/* Dependents button */}
+                  {onDependents && (
+                    <button
+                      className="btn btn-warning"
+                      type="button"
+                      onClick={() => onDependents(residence)}
+                      title="View Dependents (Family Residences)"
+                    >
+                      <i className="fa fa-users"></i> Dependents
+                    </button>
+                  )}
+
                   {/* More Dropdown */}
-                  <div className="btn-group">
+                  <div className="btn-group" style={{ position: 'static' }}>
                     <button
                       type="button"
                       className="btn btn-danger dropdown-toggle"
@@ -447,7 +462,11 @@ export default function ResidenceCard({
                     >
                       More <i className="fa fa-caret-down" aria-hidden="true"></i>
                     </button>
-                    <ul className="dropdown-menu dropdown-menu-end">
+                    <ul className="dropdown-menu dropdown-menu-end" style={{ 
+                      position: 'absolute',
+                      zIndex: 1050,
+                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.5)'
+                    }}>
                       {/* Fine Management */}
                       {onAddFine && (
                         <li>

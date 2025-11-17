@@ -20,7 +20,12 @@ if (!$userData) {
 
 // Check permission
 try {
-    $sql = "SELECT permission.select FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT permission.select FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':role_id', $userData['role_id']);
     $stmt->execute();
@@ -36,6 +41,7 @@ try {
 $step = isset($_GET['step']) ? (string)$_GET['step'] : '1';
 $company_id = isset($_GET['company_id']) ? (int)$_GET['company_id'] : 0;
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$main_residence_id = isset($_GET['main_residence_id']) ? (int)$_GET['main_residence_id'] : 0;
 
 try {
     // Build WHERE clause based on step
@@ -43,11 +49,23 @@ try {
     $where = '';
     $params = [];
     
-    // For step 6 (Completed), show 'completed' status records, for others show 'active' status
-    $statusCondition = ($step == '6') ? "fr.status = 'completed'" : "fr.status = 'active'";
-    
-    $where = " AND fr.completed_step = :step ";
-    $params[':step'] = (int)$step;
+    // Handle 'all' step - show all family residences regardless of status
+    if ($step == 'all') {
+        // No status filter for 'all' - show all records
+        $statusCondition = "1=1";
+        // No step filter for 'all'
+    } else {
+        // For step 6 (Completed), show 'completed' status records, for others show 'active' or NULL status
+        if ($step == '6') {
+            $statusCondition = "fr.status = 'completed'";
+        } else {
+            // Check if status column exists, if not, just show all
+            $statusCondition = "(fr.status = 'active' OR fr.status IS NULL OR fr.status = '')";
+        }
+        
+        $where = " AND fr.completed_step = :step ";
+        $params[':step'] = (int)$step;
+    }
 
     if ($company_id > 0) {
         // Filter by company - check both through residence and directly through customer
@@ -69,13 +87,21 @@ try {
         $params[':search2'] = '%' . $search . '%';
     }
 
+    // Filter by main residence ID if provided
+    if ($main_residence_id > 0) {
+        $where .= " AND fr.residence_id = :main_residence_id ";
+        $params[':main_residence_id'] = $main_residence_id;
+    }
+
     // Get family residences from family_residence table
     $sql = "
         SELECT 
             fr.*,
             fr.id as familyResidenceID,
             fr.id as residenceID,
+            fr.residence_id as main_residence_id,
             fr.inside_outside as insideOutside,
+            r.residenceID as main_residence_residenceID,
             r.passenger_name as main_passenger,
             r.passportNumber as main_passport,
             c.customer_name,
@@ -90,7 +116,9 @@ try {
             fr.sale_price,
             fr.sale_currency,
             fr.remarks,
-            (SELECT IFNULL(SUM(payment_amount),0) FROM customer_payments WHERE PaymentFor = fr.id) as paid_amount
+            (SELECT IFNULL(SUM(payment_amount),0) FROM customer_payments 
+             WHERE PaymentFor = fr.id 
+             AND family_res_payment = 1) as paid_amount
         FROM family_residence fr
         LEFT JOIN residence r ON r.residenceID = fr.residence_id
         LEFT JOIN customer c ON c.customer_id = fr.customer_id
@@ -99,7 +127,7 @@ try {
         )
         LEFT JOIN company comp ON comp.company_id = COALESCE(r.company, r2.company)
         LEFT JOIN airports a ON a.airport_id = fr.nationality
-        WHERE {$statusCondition} {$where}
+        WHERE 1=1 AND {$statusCondition} {$where}
         ORDER BY fr.id DESC
     ";
     

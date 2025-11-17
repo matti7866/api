@@ -4,7 +4,9 @@ import residenceService from '../../services/residenceService';
 import Swal from 'sweetalert2';
 import type { Residence } from '../../types/residence';
 import ResidenceCard from '../../components/residence/ResidenceCard';
+import FamilyResidenceCard from '../../components/residence/FamilyResidenceCard';
 import AttachmentsModal from '../../components/residence/AttachmentsModal';
+import DependentsModal from '../../components/residence/DependentsModal';
 import TawjeehModal from '../../components/residence/TawjeehModal';
 import ILOEModal from '../../components/residence/ILOEModal';
 import PaymentHistoryModal from '../../components/residence/PaymentHistoryModal';
@@ -27,7 +29,7 @@ export default function ResidenceReport() {
   const navigate = useNavigate();
   const [records, setRecords] = useState<Residence[]>([]);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'all' | 'mainland' | 'freezone'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'mainland' | 'freezone' | 'family'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -51,6 +53,7 @@ export default function ResidenceReport() {
   const [nocResidence, setNocResidence] = useState<Residence | null>(null);
   const [fineRefreshTrigger, setFineRefreshTrigger] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [dependentsModalOpen, setDependentsModalOpen] = useState(false);
 
   useEffect(() => {
     loadDropdowns();
@@ -96,27 +99,112 @@ export default function ResidenceReport() {
   const loadRecords = async () => {
     try {
       setLoading(true);
-      const params: any = {
-        page: currentPage,
-        limit: 10 // Match old app - 10 records per page
-      };
+      
+      if (activeTab === 'family') {
+        // For family residency, use the family-tasks API
+        const params: any = {
+          step: 'all', // Get all family residences regardless of step
+          page: currentPage,
+          limit: 10
+        };
+        if (searchQuery) {
+          params.search = searchQuery;
+        }
+        const response = await residenceService.getFamilyResidences(params);
+        setRecords(response.data);
+        setTotalPages(response.totalPages);
+      } else if (activeTab === 'all') {
+        // For "All Residence" tab, fetch ALL regular and family residences
+        // Fetch multiple pages to get all records, then combine and paginate client-side
+        const params: any = {
+          page: 1,
+          limit: 1000 // Fetch large batches
+        };
 
-      if (searchQuery) {
-        params.search = searchQuery;
+        if (searchQuery) {
+          params.search = searchQuery;
+        }
+
+        // Fetch regular residences - get all pages
+        let allRegularRecords: any[] = [];
+        let regularPage = 1;
+        let hasMoreRegular = true;
+        
+        while (hasMoreRegular) {
+          const regularParams = { ...params, page: regularPage, limit: 1000 };
+          const regularResponse = await residenceService.getResidences(regularParams);
+          if (regularResponse.data && regularResponse.data.length > 0) {
+            allRegularRecords = [...allRegularRecords, ...regularResponse.data];
+            if (regularResponse.data.length < 1000 || regularPage >= regularResponse.totalPages) {
+              hasMoreRegular = false;
+            } else {
+              regularPage++;
+            }
+          } else {
+            hasMoreRegular = false;
+          }
+        }
+
+        // Fetch all family residences in one call
+        const familyResponse = await residenceService.getFamilyResidences({ 
+          step: 'all', 
+          search: searchQuery || undefined, 
+          getAll: true 
+        });
+        const allFamilyRecords = familyResponse.data || [];
+        
+        console.log('All Residence Tab - Regular records:', allRegularRecords.length);
+        console.log('All Residence Tab - Family records:', allFamilyRecords.length);
+
+        // Combine both results
+        const allRecords = [
+          ...allRegularRecords,
+          ...allFamilyRecords
+        ];
+
+        // Sort by ID descending (newest first)
+        allRecords.sort((a: any, b: any) => {
+          const aId = a.residenceID || a.familyResidenceID || 0;
+          const bId = b.residenceID || b.familyResidenceID || 0;
+          return bId - aId;
+        });
+
+        // Apply pagination to combined results
+        const totalRecords = allRecords.length;
+        const totalPages = Math.ceil(totalRecords / 10);
+        const startIndex = (currentPage - 1) * 10;
+        const endIndex = startIndex + 10;
+        const paginatedRecords = allRecords.slice(startIndex, endIndex);
+
+        setRecords(paginatedRecords);
+        setTotalPages(totalPages);
+      } else {
+        const params: any = {
+          page: currentPage,
+          limit: 10 // Match old app - 10 records per page
+        };
+
+        if (searchQuery) {
+          params.search = searchQuery;
+        }
+
+        if (activeTab === 'mainland') {
+          params.insideOutside = 'inside';
+        } else if (activeTab === 'freezone') {
+          params.insideOutside = 'outside';
+        }
+
+        const response = await residenceService.getResidences(params);
+        setRecords(response.data);
+        setTotalPages(response.totalPages);
       }
-
-      if (activeTab === 'mainland') {
-        params.insideOutside = 'inside';
-      } else if (activeTab === 'freezone') {
-        params.insideOutside = 'outside';
-      }
-
-      const response = await residenceService.getResidences(params);
-      setRecords(response.data);
-      setTotalPages(response.totalPages);
     } catch (error: any) {
       console.error('Error loading records:', error);
+      console.error('Error details:', error.response?.data);
       Swal.fire('Error', error.response?.data?.message || 'Failed to load records', 'error');
+      // Set empty array on error to prevent blank page
+      setRecords([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
@@ -127,7 +215,7 @@ export default function ResidenceReport() {
     setCurrentPage(1);
   };
 
-  const switchTab = (tab: 'all' | 'mainland' | 'freezone') => {
+  const switchTab = (tab: 'all' | 'mainland' | 'freezone' | 'family') => {
     setActiveTab(tab);
     setCurrentPage(1);
     setSearchQuery('');
@@ -182,6 +270,11 @@ export default function ResidenceReport() {
     console.log('Attachments modal state set to open');
   };
 
+  const handleDependents = (residence: Residence) => {
+    setSelectedResidence(residence);
+    setDependentsModalOpen(true);
+  };
+
   const handleTawjeeh = (residence: Residence) => {
     setSelectedResidence(residence);
     setTawjeehModalOpen(true);
@@ -195,6 +288,18 @@ export default function ResidenceReport() {
   const handlePaymentHistory = (residence: Residence) => {
     setSelectedResidence(residence);
     setPaymentHistoryModalOpen(true);
+  };
+
+  const handleFamilyPaymentHistory = async (residenceID: number) => {
+    try {
+      const history = await residenceService.getFamilyPaymentHistory(residenceID);
+      // Create a temporary residence object for the modal
+      const tempResidence = { ...records.find(r => r.residenceID === residenceID) } as Residence;
+      setSelectedResidence(tempResidence);
+      setPaymentHistoryModalOpen(true);
+    } catch (error: any) {
+      Swal.fire('Error', error.response?.data?.message || 'Failed to load payment history', 'error');
+    }
   };
 
   const handleNOC = (residence: Residence) => {
@@ -315,6 +420,21 @@ export default function ResidenceReport() {
   };
 
   const handlePayTotal = (residence: Residence) => {
+    setSelectedResidence(residence);
+    setPaymentModalOpen(true);
+  };
+
+  const handleFamilyPayTotal = async (residence: Residence) => {
+    // For family residence, calculate outstanding and show payment modal
+    const salePrice = parseFloat(residence.sale_price as any) || 0;
+    const paidAmount = parseFloat((residence as any).paid_amount as any) || 0;
+    const outstanding = salePrice - paidAmount;
+    
+    if (outstanding <= 0) {
+      Swal.fire('Info', 'No outstanding amount for this family residence', 'info');
+      return;
+    }
+    
     setSelectedResidence(residence);
     setPaymentModalOpen(true);
   };
@@ -571,7 +691,7 @@ export default function ResidenceReport() {
   };
 
   return (
-    <div className="residence-report-page">
+    <div className="residence-report-page" style={{ overflow: 'visible' }}>
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
@@ -630,38 +750,87 @@ export default function ResidenceReport() {
 
       {/* Tabs */}
       <div className="mb-6">
-        <ul className="nav nav-tabs" id="residenceTabs">
-          <li className="nav-item">
-            <a
-              href="#default-tab-1"
-              data-bs-toggle="tab"
-              className={`nav-link ${activeTab === 'all' ? 'active' : ''}`}
-              onClick={() => switchTab('all')}
-            >
-              All Residence Records
-            </a>
-          </li>
-          <li className="nav-item">
-            <a
-              href="#mainland-tab"
-              data-bs-toggle="tab"
-              className={`nav-link ${activeTab === 'mainland' ? 'active' : ''}`}
-              onClick={() => switchTab('mainland')}
-            >
-              Mainland
-            </a>
-          </li>
-          <li className="nav-item">
-            <a
-              href="#freezone-tab"
-              data-bs-toggle="tab"
-              className={`nav-link ${activeTab === 'freezone' ? 'active' : ''}`}
-              onClick={() => switchTab('freezone')}
-            >
-              Freezone
-            </a>
-          </li>
-        </ul>
+        <div className="card" style={{ backgroundColor: '#2d353c', border: '1px solid #495057' }}>
+          <ul className="nav nav-tabs" id="residenceTabs" style={{ 
+            borderBottom: 'none',
+            marginBottom: 0,
+            backgroundColor: '#2d353c',
+            padding: '0'
+          }}>
+            <li className="nav-item">
+              <a
+                href="#default-tab-1"
+                data-bs-toggle="tab"
+                className={`nav-link ${activeTab === 'all' ? 'active' : ''}`}
+                onClick={() => switchTab('all')}
+                style={{
+                  color: activeTab === 'all' ? '#ffffff' : '#9ca3af',
+                  borderBottom: activeTab === 'all' ? '3px solid #ff423e' : '3px solid transparent',
+                  backgroundColor: 'transparent',
+                  padding: '16px 24px',
+                  cursor: 'pointer',
+                  fontWeight: activeTab === 'all' ? '600' : '400'
+                }}
+              >
+                All Residence Records
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                href="#mainland-tab"
+                data-bs-toggle="tab"
+                className={`nav-link ${activeTab === 'mainland' ? 'active' : ''}`}
+                onClick={() => switchTab('mainland')}
+                style={{
+                  color: activeTab === 'mainland' ? '#ffffff' : '#9ca3af',
+                  borderBottom: activeTab === 'mainland' ? '3px solid #ff423e' : '3px solid transparent',
+                  backgroundColor: 'transparent',
+                  padding: '16px 24px',
+                  cursor: 'pointer',
+                  fontWeight: activeTab === 'mainland' ? '600' : '400'
+                }}
+              >
+                Mainland
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                href="#freezone-tab"
+                data-bs-toggle="tab"
+                className={`nav-link ${activeTab === 'freezone' ? 'active' : ''}`}
+                onClick={() => switchTab('freezone')}
+                style={{
+                  color: activeTab === 'freezone' ? '#ffffff' : '#9ca3af',
+                  borderBottom: activeTab === 'freezone' ? '3px solid #ff423e' : '3px solid transparent',
+                  backgroundColor: 'transparent',
+                  padding: '16px 24px',
+                  cursor: 'pointer',
+                  fontWeight: activeTab === 'freezone' ? '600' : '400'
+                }}
+              >
+                Freezone
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                href="#family-tab"
+                data-bs-toggle="tab"
+                className={`nav-link ${activeTab === 'family' ? 'active' : ''}`}
+                onClick={() => switchTab('family')}
+                style={{
+                  color: activeTab === 'family' ? '#ffffff' : '#9ca3af',
+                  borderBottom: activeTab === 'family' ? '3px solid #ff423e' : '3px solid transparent',
+                  backgroundColor: 'transparent',
+                  padding: '16px 24px',
+                  cursor: 'pointer',
+                  fontWeight: activeTab === 'family' ? '600' : '400'
+                }}
+              >
+                Family Residency
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       {/* Tab Content - Directly on page */}
@@ -702,7 +871,7 @@ export default function ResidenceReport() {
         </div>
 
         {/* Residence List - Directly on page */}
-        <div id="DailyRpt">
+        <div id="DailyRpt" style={{ overflow: 'visible' }}>
             {loading ? (
               <div className="text-center py-8">
                 <i className="fa fa-spinner fa-spin fa-2x text-gray-400"></i>
@@ -713,32 +882,52 @@ export default function ResidenceReport() {
                 <p className="text-gray-400">No residences found</p>
               </div>
             ) : (
-              records.map((residence) => (
-                <ResidenceCard
-                  key={residence.residenceID}
-                  residence={residence}
-                  onContinue={(res) => navigate(`/residence/${res.residenceID}`)}
-                  onAttachments={handleAttachments}
-                  onTawjeeh={handleTawjeeh}
-                  onILOE={handleILOE}
-                  onPaymentHistory={handlePaymentHistory}
-                  onNOC={handleNOC}
-                  onSalaryCertificate={handleSalaryCertificate}
-                  onPayTotal={handlePayTotal}
-                  onCancellationFee={handleCancellationFee}
-                  onCreditAdjustment={handleCreditAdjustment}
-                  onAddFine={handleAddFine}
-                  onViewFine={handleViewFine}
-                  onAddCustomCharge={handleAddCustomCharge}
-                  onGenerateInvoice={handleGenerateInvoice}
-                  onPerformTawjeeh={handlePerformTawjeeh}
-                  onIssueInsurance={handleIssueInsurance}
-                  onDeleteResidence={handleDeleteResidence}
-                  onCancelResidence={handleCancelResidence}
-                  onRenew={handleRenew}
-                  isAdmin={false}
-                />
-              ))
+              records.map((residence) => {
+                // Check if this is a family residence (has familyResidenceID or is from family tab)
+                const isFamilyResidence = activeTab === 'family' || 
+                                         (residence as any).familyResidenceID || 
+                                         (residence as any).family_residence_id ||
+                                         (!residence.completedStep && (residence as any).completed_step !== undefined);
+                
+                if (isFamilyResidence) {
+                  return (
+                    <FamilyResidenceCard
+                      key={residence.residenceID || (residence as any).familyResidenceID}
+                      residence={residence}
+                      onPaymentHistory={handlePaymentHistory}
+                      onPayTotal={handleFamilyPayTotal}
+                      onAttachments={handleAttachments}
+                    />
+                  );
+                }
+                return (
+                  <ResidenceCard
+                    key={residence.residenceID}
+                    residence={residence}
+                    onContinue={(res) => navigate(`/residence/${res.residenceID}`)}
+                    onAttachments={handleAttachments}
+                    onTawjeeh={handleTawjeeh}
+                    onILOE={handleILOE}
+                    onPaymentHistory={handlePaymentHistory}
+                    onNOC={handleNOC}
+                    onSalaryCertificate={handleSalaryCertificate}
+                    onPayTotal={handlePayTotal}
+                    onCancellationFee={handleCancellationFee}
+                    onCreditAdjustment={handleCreditAdjustment}
+                    onAddFine={handleAddFine}
+                    onViewFine={handleViewFine}
+                    onAddCustomCharge={handleAddCustomCharge}
+                    onGenerateInvoice={handleGenerateInvoice}
+                    onPerformTawjeeh={handlePerformTawjeeh}
+                    onIssueInsurance={handleIssueInsurance}
+                    onDeleteResidence={handleDeleteResidence}
+                    onCancelResidence={handleCancelResidence}
+                    onRenew={handleRenew}
+                    onDependents={handleDependents}
+                    isAdmin={false}
+                  />
+                );
+              })
             )}
 
             {/* Pagination */}
@@ -836,15 +1025,55 @@ export default function ResidenceReport() {
             }}
             residence={selectedResidence}
             onLoadAttachments={async (residenceID) => {
-              const data = await residenceService.getAttachments(residenceID);
-              return Array.isArray(data) ? data : [];
+              // Check if this is a family residence
+              const isFamily = activeTab === 'family' || 
+                              (selectedResidence && ((selectedResidence as any).familyResidenceID || 
+                               (selectedResidence as any).family_residence_id ||
+                               (!selectedResidence.completedStep && (selectedResidence as any).completed_step !== undefined)));
+              
+              if (isFamily) {
+                const data = await residenceService.getFamilyAttachments(residenceID);
+                return Array.isArray(data) ? data : [];
+              } else {
+                const data = await residenceService.getAttachments(residenceID);
+                return Array.isArray(data) ? data : [];
+              }
             }}
             onUploadAttachment={async (residenceID, stepNumber, file, fileType) => {
-              const result = await residenceService.uploadAttachment(residenceID, stepNumber, file, fileType);
-              return result;
+              // Check if this is a family residence
+              const isFamily = activeTab === 'family' || 
+                              (selectedResidence && ((selectedResidence as any).familyResidenceID || 
+                               (selectedResidence as any).family_residence_id ||
+                               (!selectedResidence.completedStep && (selectedResidence as any).completed_step !== undefined)));
+              
+              if (isFamily) {
+                // Map step number to document type for family residence
+                const documentTypeMap: Record<number, string> = {
+                  1: 'passport',
+                  11: 'photo',
+                  12: 'id_front',
+                  13: 'id_back',
+                  14: 'other'
+                };
+                const documentType = documentTypeMap[fileType || stepNumber] || 'other';
+                await residenceService.uploadFamilyAttachment(residenceID, documentType, file);
+              } else {
+                const result = await residenceService.uploadAttachment(residenceID, stepNumber, file, fileType);
+                return result;
+              }
             }}
             onDeleteAttachment={async (attachmentId) => {
-              await residenceService.deleteAttachment(attachmentId);
+              // Check if this is a family residence
+              const isFamily = activeTab === 'family' || 
+                              (selectedResidence && ((selectedResidence as any).familyResidenceID || 
+                               (selectedResidence as any).family_residence_id ||
+                               (!selectedResidence.completedStep && (selectedResidence as any).completed_step !== undefined)));
+              
+              if (isFamily) {
+                await residenceService.deleteFamilyAttachment(attachmentId);
+              } else {
+                await residenceService.deleteAttachment(attachmentId);
+              }
             }}
           />
 
@@ -876,8 +1105,19 @@ export default function ResidenceReport() {
             }}
             residence={selectedResidence}
             onLoadHistory={async (residenceID) => {
-              const data = await residenceService.getPaymentHistory(residenceID);
-              return Array.isArray(data) ? data : [];
+              // Check if this is a family residence
+              const isFamily = activeTab === 'family' || 
+                              (selectedResidence && ((selectedResidence as any).familyResidenceID || 
+                               (selectedResidence as any).family_residence_id ||
+                               (!selectedResidence.completedStep && (selectedResidence as any).completed_step !== undefined)));
+              
+              if (isFamily) {
+                const data = await residenceService.getFamilyPaymentHistory(residenceID);
+                return Array.isArray(data) ? data : [];
+              } else {
+                const data = await residenceService.getPaymentHistory(residenceID);
+                return Array.isArray(data) ? data : [];
+              }
             }}
           />
 
@@ -891,6 +1131,10 @@ export default function ResidenceReport() {
             residence={selectedResidence}
             accounts={dropdowns.accounts}
             currencies={dropdowns.currencies}
+            isFamilyResidence={activeTab === 'family' || 
+                              (selectedResidence && ((selectedResidence as any).familyResidenceID || 
+                               (selectedResidence as any).family_residence_id ||
+                               (!selectedResidence.completedStep && (selectedResidence as any).completed_step !== undefined)))}
           />
 
           {cancelModalOpen && (
@@ -993,6 +1237,16 @@ export default function ResidenceReport() {
           passengerName={nocResidence.passenger_name}
         />
       )}
+
+      {/* Dependents Modal */}
+      <DependentsModal
+        isOpen={dependentsModalOpen}
+        onClose={() => {
+          setDependentsModalOpen(false);
+          setSelectedResidence(null);
+        }}
+        residence={selectedResidence}
+      />
     </div>
   );
 }

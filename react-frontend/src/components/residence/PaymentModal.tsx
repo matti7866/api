@@ -11,6 +11,7 @@ interface PaymentModalProps {
   residence: Residence | null;
   accounts: Array<{ accountID: number; accountName: string }>;
   currencies?: Array<{ currencyID: number; currencyName: string }>;
+  isFamilyResidence?: boolean;
 }
 
 interface UnifiedBreakdown {
@@ -29,7 +30,8 @@ export default function PaymentModal({
   onClose,
   onSubmit,
   residence,
-  accounts
+  accounts,
+  isFamilyResidence = false
 }: PaymentModalProps) {
   const [breakdown, setBreakdown] = useState<UnifiedBreakdown | null>(null);
   const [loading, setLoading] = useState(false);
@@ -50,15 +52,40 @@ export default function PaymentModal({
 
     setLoading(true);
     try {
-      const data = await residenceService.getUnifiedOutstanding(residence.residenceID);
-      setBreakdown(data);
-      
-      // Set default payment amount to total outstanding
-      if (data.total_outstanding > 0) {
-        setFormData(prev => ({
-          ...prev,
-          paymentAmount: data.total_outstanding.toFixed(2)
-        }));
+      if (isFamilyResidence) {
+        // For family residence, calculate outstanding directly
+        const salePrice = parseFloat(residence.sale_price as any) || 0;
+        const paidAmount = parseFloat((residence as any).paid_amount as any) || 0;
+        const outstanding = salePrice - paidAmount;
+        
+        setBreakdown({
+          residence_outstanding: outstanding,
+          fine_outstanding: 0,
+          tawjeeh_outstanding: 0,
+          iloe_insurance_outstanding: 0,
+          iloe_fine_outstanding: 0,
+          cancellation_outstanding: 0,
+          custom_charges_outstanding: 0,
+          total_outstanding: outstanding
+        });
+        
+        if (outstanding > 0) {
+          setFormData(prev => ({
+            ...prev,
+            paymentAmount: outstanding.toFixed(2)
+          }));
+        }
+      } else {
+        const data = await residenceService.getUnifiedOutstanding(residence.residenceID);
+        setBreakdown(data);
+        
+        // Set default payment amount to total outstanding
+        if (data.total_outstanding > 0) {
+          setFormData(prev => ({
+            ...prev,
+            paymentAmount: data.total_outstanding.toFixed(2)
+          }));
+        }
       }
     } catch (error) {
       console.error('Error loading breakdown:', error);
@@ -93,14 +120,23 @@ export default function PaymentModal({
 
     setLoading(true);
     try {
-      await residenceService.processUnifiedPayment({
-        residenceID: residence.residenceID,
-        paymentAmount,
-        accountID: parseInt(formData.accountID),
-        remarks: formData.remarks
-      });
-
-      Swal.fire('Success!', 'Unified payment processed successfully', 'success');
+      if (isFamilyResidence) {
+        await residenceService.processFamilyPayment({
+          familyResidenceID: residence.residenceID,
+          paymentAmount,
+          accountID: parseInt(formData.accountID),
+          remarks: formData.remarks
+        });
+        Swal.fire('Success!', 'Family residence payment processed successfully', 'success');
+      } else {
+        await residenceService.processUnifiedPayment({
+          residenceID: residence.residenceID,
+          paymentAmount,
+          accountID: parseInt(formData.accountID),
+          remarks: formData.remarks
+        });
+        Swal.fire('Success!', 'Unified payment processed successfully', 'success');
+      }
       onClose();
       onSubmit({});
     } catch (error: any) {

@@ -3,7 +3,7 @@ import { config } from '../utils/config';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useAppSettings } from '../context/AppSettingsContext';
 import { useAuth } from '../context/AuthContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface MenuItem {
   path?: string;
@@ -219,7 +219,9 @@ export default function ColorAdminSidebar() {
     appSidebarMinify, 
     appSidebarLight, 
     appSidebarTransparent,
-    toggleAppSidebarMinify 
+    toggleAppSidebarMinify,
+    toggleAppSidebarMobile,
+    appSidebarMobileToggled
   } = useAppSettings();
 
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>({});
@@ -234,6 +236,25 @@ export default function ColorAdminSidebar() {
       [title]: !prev[title]
     }));
   };
+
+  // Close sidebar on mobile when clicking a menu item
+  const handleMenuClick = () => {
+    if (window.innerWidth <= 768 && appSidebarMobileToggled) {
+      toggleAppSidebarMobile({ preventDefault: () => {} } as React.MouseEvent);
+    }
+  };
+
+  // Handle window resize - close mobile sidebar when switching to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && appSidebarMobileToggled) {
+        toggleAppSidebarMobile({ preventDefault: () => {} } as React.MouseEvent);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [appSidebarMobileToggled, toggleAppSidebarMobile]);
 
   const renderMenuItem = (item: MenuItem, index: number) => {
     // Skip admin-only items if user is not admin
@@ -283,11 +304,11 @@ export default function ColorAdminSidebar() {
               return (
                 <div key={childIndex} className={'menu-item ' + (childActive ? 'active' : '')}>
                   {child.path ? (
-                    <Link to={child.path} className="menu-link">
+                    <Link to={child.path} className="menu-link" onClick={handleMenuClick}>
                       <div className="menu-text">{child.title}</div>
                     </Link>
                   ) : (
-                    <a href="#" className="menu-link">
+                    <a href="#" className="menu-link" onClick={handleMenuClick}>
                       <div className="menu-text">{child.title}</div>
                     </a>
                   )}
@@ -302,7 +323,7 @@ export default function ColorAdminSidebar() {
     return (
       <div key={index} className={'menu-item ' + (active ? 'active' : '')}>
         {item.path ? (
-          <Link to={item.path} className="menu-link">
+          <Link to={item.path} className="menu-link" onClick={handleMenuClick}>
             {item.icon && <div className="menu-icon"><i className={item.icon}></i></div>}
             <div className="menu-text">
               {item.title}
@@ -310,7 +331,7 @@ export default function ColorAdminSidebar() {
             </div>
           </Link>
         ) : (
-          <a href="#" className="menu-link">
+          <a href="#" className="menu-link" onClick={handleMenuClick}>
             {item.icon && <div className="menu-icon"><i className={item.icon}></i></div>}
             <div className="menu-text">
               {item.title}
@@ -323,15 +344,27 @@ export default function ColorAdminSidebar() {
   };
 
   return (
-    <div 
-      id="sidebar" 
-      className={
-        'app-sidebar ' +
-        (appSidebarLight ? 'app-sidebar-light ' : '') +
-        (appSidebarTransparent ? 'app-sidebar-transparent' : '')
-      }
-    >
-      <PerfectScrollbar className="app-sidebar-content" options={{ suppressScrollX: true }}>
+    <>
+      {/* Mobile Backdrop */}
+      {appSidebarMobileToggled && (
+        <div 
+          className="app-sidebar-mobile-backdrop"
+          onClick={(e) => {
+            e.preventDefault();
+            toggleAppSidebarMobile(e);
+          }}
+        />
+      )}
+      
+      <div 
+        id="sidebar" 
+        className={
+          'app-sidebar ' +
+          (appSidebarLight ? 'app-sidebar-light ' : '') +
+          (appSidebarTransparent ? 'app-sidebar-transparent' : '')
+        }
+      >
+        <PerfectScrollbar className="app-sidebar-content" options={{ suppressScrollX: true }}>
         <div className="menu">
           <div className="menu-profile">
             <div className="menu-profile-cover with-shadow"></div>
@@ -377,5 +410,6 @@ export default function ColorAdminSidebar() {
         </div>
       </PerfectScrollbar>
     </div>
+    </>
   );
 }

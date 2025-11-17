@@ -22,6 +22,9 @@ interface LedgerRecord {
   tawjeeh_payments: number;
   iloe_payments: number;
   current_status: string;
+  is_family_residence?: number;
+  familyResidenceID?: number;
+  main_residence_id?: number;
 }
 
 interface CustomerInfo {
@@ -918,6 +921,7 @@ export default function ResidenceLedger() {
                             </tr>
                           ) : (
                             records.map((record, index) => {
+                              const isFamilyResidence = record.is_family_residence === 1;
                               const totalPaidForRecord = parseFloat(record.residencePayment?.toString() || '0') +
                                                          parseFloat(record.finePayment?.toString() || '0') +
                                                          parseFloat(record.tawjeeh_payments?.toString() || '0') +
@@ -937,10 +941,23 @@ export default function ResidenceLedger() {
                                   <td style={{ WebkitPrintColorAdjust: 'exact' }}>{indexOfFirstRecord + index}</td>
                                   <td className="text-capitalize" style={{ WebkitPrintColorAdjust: 'exact' }}>
                                     {record.main_passenger}
+                                    {isFamilyResidence && (
+                                      <span className="badge bg-info ms-1" style={{ fontSize: '8px' }} title="Family Residence">
+                                        FAM
+                                      </span>
+                                    )}
                                     <br />
                                     <small className="text-muted">
                                       <i className="fa fa-flag"></i> {record.nationality || 'N/A'}
                                     </small>
+                                    {isFamilyResidence && record.main_residence_id && (
+                                      <>
+                                        <br />
+                                        <small className="text-muted" style={{ fontSize: '8px' }}>
+                                          <i className="fa fa-link"></i> Main: #{record.main_residence_id}
+                                        </small>
+                                      </>
+                                    )}
                                   </td>
                                   <td style={{ WebkitPrintColorAdjust: 'exact' }}>{record.company_name || 'N/A'}</td>
                                   <td style={{ WebkitPrintColorAdjust: 'exact' }}>{getDueSince(record.dt)}</td>

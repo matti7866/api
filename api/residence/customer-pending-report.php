@@ -21,7 +21,12 @@ if (!$userData) {
 
 // Check permission
 try {
-    $sql = "SELECT permission.select FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT permission.select FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':role_id', $userData['role_id']);
     $stmt->execute();
@@ -104,25 +109,39 @@ try {
                     LEFT JOIN residence_charges rch ON rch.residence_id = r.residenceID
                     WHERE r.customer_id = main_customer AND r.saleCurID = :currencyID) +
                     -- Custom charges
-                    " . $customChargesQuery . "
+                    " . $customChargesQuery . " +
+                    -- Family residence charges (include ALL family residences for customer, regardless of currency)
+                    (SELECT IFNULL(SUM(fr.sale_price), 0) FROM family_residence fr 
+                        WHERE fr.customer_id = main_customer)
                 ) - (
                     -- Calculate total payments (regular payments + cancel payments + fine payments + TAWJEEH + ILOE) for specific currency
+                    -- Exclude family residence payments (family_res_payment = 1) from regular payments
                     (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
                         INNER JOIN residence r ON r.residenceID = cp.PaymentFor 
-                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID) +
+                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
                     (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.residenceCancelPayment IS NOT NULL AND cp.customer_id = main_customer AND cp.currencyID = :currencyID) +
+                        WHERE cp.residenceCancelPayment IS NOT NULL AND cp.customer_id = main_customer AND cp.currencyID = :currencyID 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
                     (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
                         INNER JOIN residencefine rf ON rf.residenceFineID = cp.residenceFinePayment 
-                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID) +
-                    -- TAWJEEH payments
+                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
+                    -- TAWJEEH payments (exclude family payments)
                     (SELECT IFNULL(SUM(cp.tawjeeh_payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID AND cp.is_tawjeeh_payment = 1) +
-                    -- ILOE payments (insurance + fine payments)
+                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID AND cp.is_tawjeeh_payment = 1 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
+                    -- ILOE payments (insurance + fine payments, exclude family payments)
                     (SELECT IFNULL(SUM(cp.insurance_payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID AND cp.is_insurance_payment = 1) +
+                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID AND cp.is_insurance_payment = 1 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
                     (SELECT IFNULL(SUM(cp.insurance_fine_payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID AND cp.is_insurance_fine_payment = 1)
+                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID AND cp.is_insurance_fine_payment = 1 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
+                    -- Family residence payments (ONLY where family_res_payment = 1)
+                    (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
+                        WHERE cp.customer_id = main_customer AND cp.currencyID = :currencyID 
+                        AND cp.family_res_payment = 1)
                 ) AS total 
             FROM customer
         ) as baseTable 
@@ -180,25 +199,39 @@ try {
                     LEFT JOIN residence_charges rch ON rch.residence_id = r.residenceID
                     WHERE r.customer_id = :customer_id AND r.saleCurID = :currencyID) +
                     -- Custom charges
-                    " . $customChargesQuerySingle . "
+                    " . $customChargesQuerySingle . " +
+                    -- Family residence charges (include ALL family residences for customer, regardless of currency)
+                    (SELECT IFNULL(SUM(fr.sale_price), 0) FROM family_residence fr 
+                        WHERE fr.customer_id = :customer_id)
                 ) - (
                     -- Calculate total payments (regular payments + cancel payments + fine payments + TAWJEEH + ILOE) for specific customer and currency
+                    -- Exclude family residence payments (family_res_payment = 1) from regular payments
                     (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
                         INNER JOIN residence r ON r.residenceID = cp.PaymentFor 
-                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID) +
+                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
                     (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.residenceCancelPayment IS NOT NULL AND cp.customer_id = :customer_id AND cp.currencyID = :currencyID) +
+                        WHERE cp.residenceCancelPayment IS NOT NULL AND cp.customer_id = :customer_id AND cp.currencyID = :currencyID 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
                     (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
                         INNER JOIN residencefine rf ON rf.residenceFineID = cp.residenceFinePayment 
-                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID) +
-                    -- TAWJEEH payments
+                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
+                    -- TAWJEEH payments (exclude family payments)
                     (SELECT IFNULL(SUM(cp.tawjeeh_payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID AND cp.is_tawjeeh_payment = 1) +
-                    -- ILOE payments (insurance + fine payments)
+                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID AND cp.is_tawjeeh_payment = 1 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
+                    -- ILOE payments (insurance + fine payments, exclude family payments)
                     (SELECT IFNULL(SUM(cp.insurance_payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID AND cp.is_insurance_payment = 1) +
+                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID AND cp.is_insurance_payment = 1 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
                     (SELECT IFNULL(SUM(cp.insurance_fine_payment_amount), 0) FROM customer_payments cp 
-                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID AND cp.is_insurance_fine_payment = 1)
+                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID AND cp.is_insurance_fine_payment = 1 
+                        AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)) +
+                    -- Family residence payments (ONLY where family_res_payment = 1)
+                    (SELECT IFNULL(SUM(cp.payment_amount), 0) FROM customer_payments cp 
+                        WHERE cp.customer_id = :customer_id AND cp.currencyID = :currencyID 
+                        AND cp.family_res_payment = 1)
                 ) AS total 
             from customer 
             WHERE customer_id = :customer_id
