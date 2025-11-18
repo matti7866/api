@@ -20,7 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Get JSON input
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get JSON input
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!$input || !isset($input['email'])) {
@@ -41,7 +46,7 @@ try {
     }
     
     // Check if user exists (status = 1 means active)
-    $query = "SELECT staff_id, staff_name FROM staff WHERE staff_email = :email AND status = 1";
+    $query = "SELECT staff_id, staff_name, staff_pic FROM staff WHERE staff_email = :email AND status = 1";
     $stmt = $pdo->prepare($query);
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -121,10 +126,27 @@ try {
         
         $mail->send();
         
+        // Convert staff picture URL if available
+        $staffPicture = null;
+        if (!empty($user['staff_pic'])) {
+            // Build full URL for staff picture
+            if (strpos($user['staff_pic'], 'http') === 0) {
+                // Already a full URL
+                $staffPicture = convertToProductionUrl($user['staff_pic']);
+            } else {
+                // Relative path - make it absolute
+                $staffPicture = BASE_URL . '/' . ltrim($user['staff_pic'], '/');
+            }
+        }
+        
         JWTHelper::sendResponse([
             'success' => true,
             'message' => 'OTP sent successfully to your email',
-            'email' => $email
+            'email' => $email,
+            'staff' => [
+                'name' => $user['staff_name'],
+                'picture' => $staffPicture
+            ]
         ], 200);
         
     } catch (Exception $e) {

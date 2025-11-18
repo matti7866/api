@@ -16,7 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Get JSON input
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get JSON input
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!$input || !isset($input['email']) || !isset($input['otp'])) {
@@ -87,6 +92,18 @@ try {
     // Remove sensitive data
     unset($user['otp']);
     unset($user['otp_expiry']);
+    
+    // Convert staff picture URL if available
+    if (!empty($user['staff_pic'])) {
+        // Build full URL for staff picture
+        if (strpos($user['staff_pic'], 'http') === 0) {
+            // Already a full URL
+            $user['staff_pic'] = convertToProductionUrl($user['staff_pic']);
+        } else {
+            // Relative path - make it absolute
+            $user['staff_pic'] = BASE_URL . '/' . ltrim($user['staff_pic'], '/');
+        }
+    }
     
     // Start PHP session for backend compatibility
     if (session_status() === PHP_SESSION_NONE) {

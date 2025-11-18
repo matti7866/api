@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
+import { cn } from '../../lib/utils';
 import './LoginOTP.css';
 
 const LoginOTP: React.FC = () => {
@@ -12,7 +13,8 @@ const LoginOTP: React.FC = () => {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [staffInfo, setStaffInfo] = useState<{ name: string; picture?: string } | null>(null);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,12 +48,11 @@ const LoginOTP: React.FC = () => {
       const result = await authService.sendOTP(email);
       
       if (result.success) {
-        setSuccess('OTP sent successfully! Please check your email.');
         setOtpSent(true);
-        setTimeout(() => {
-          setStep('otp');
-          setSuccess('');
-        }, 1500);
+        if (result.staff) {
+          setStaffInfo(result.staff);
+        }
+        setStep('otp');
       } else {
         setError(result.message || 'Failed to send OTP');
       }
@@ -140,85 +141,121 @@ const LoginOTP: React.FC = () => {
     setError('');
     setSuccess('');
     setOtpSent(false);
+    setStaffInfo(null);
   };
 
   return (
-    <div className="login-container">
-      {/* Animated Background */}
-      <div className="login-background">
-        <div className="gradient-orb orb-1"></div>
-        <div className="gradient-orb orb-2"></div>
-        <div className="gradient-orb orb-3"></div>
-        <div className="grid-pattern"></div>
-      </div>
-
-      {/* Login Card */}
-      <div className="login-card-wrapper">
-        <div className={`login-card ${step === 'otp' ? 'card-expanded' : ''}`}>
-          {/* Logo Section */}
-          <div className="logo-section">
-            <div className="logo-container">
-              <img 
-                src="/assets/logo-white.png" 
-                alt="Selab Nadiry Logo" 
-                className="company-logo"
-                onError={(e) => {
-                  // Fallback to initials if logo fails to load
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const parent = target.parentElement;
-                  if (parent && !parent.querySelector('.logo-fallback')) {
-                    const fallback = document.createElement('div');
-                    fallback.className = 'logo-fallback';
-                    fallback.textContent = 'SN';
-                    parent.appendChild(fallback);
-                  }
-                }}
-              />
-              <div className="logo-fallback" style={{ display: 'none' }}>SN</div>
-            </div>
+    <div className="login-surprise-container">
+      {/* Animated gradient background */}
+      <div className="login-surprise-bg" />
+      
+      {/* Floating shapes */}
+      <div className="login-surprise-orb login-surprise-orb-1" />
+      <div className="login-surprise-orb login-surprise-orb-2" />
+      <div className="login-surprise-orb login-surprise-orb-3" />
+      
+      {/* Glass morphism container */}
+      <div className="login-surprise-card-wrapper">
+        <div className="login-surprise-card-glow" />
+        
+        <div className={cn("login-surprise-card", step === 'otp' && "login-surprise-card-expanded")}>
+          {/* Logo/Header */}
+          <div className="login-surprise-header">
+            {step === 'email' ? (
+              <>
+                <img 
+                  src="/assets/logo-white.png" 
+                  alt="Selab Nadiry Logo" 
+                  className="login-surprise-logo-img"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const parent = target.parentElement;
+                    if (parent && !parent.querySelector('.login-surprise-logo-fallback')) {
+                      const fallback = document.createElement('div');
+                      fallback.className = 'login-surprise-logo-fallback';
+                      fallback.textContent = 'SN';
+                      parent.appendChild(fallback);
+                    }
+                  }}
+                />
+                <div className="login-surprise-logo-fallback" style={{ display: 'none' }}>SN</div>
+              </>
+            ) : (
+              <>
+                {staffInfo?.picture && staffInfo.picture !== 'null' && staffInfo.picture !== '' ? (
+                  <img 
+                    src={staffInfo.picture} 
+                    alt={staffInfo.name}
+                    className="login-surprise-staff-img"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent && !parent.querySelector('.login-surprise-staff-fallback')) {
+                        const fallback = document.createElement('div');
+                        fallback.className = 'login-surprise-staff-fallback';
+                        fallback.textContent = staffInfo?.name?.charAt(0) || 'U';
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="login-surprise-staff-fallback">
+                    {staffInfo?.name?.charAt(0) || 'U'}
+                  </div>
+                )}
+                {staffInfo?.name && (
+                  <h2 className="login-surprise-staff-name">{staffInfo.name}</h2>
+                )}
+              </>
+            )}
+            <h1 className="login-surprise-title">
+              {step === 'email' ? 'Welcome Back' : 'Enter OTP'}
+            </h1>
+            <p className="login-surprise-subtitle">
+              {step === 'email' ? 'Sign in to continue your journey' : 'We sent a code to your email'}
+            </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="alert-message alert-error">
-              <svg className="alert-icon" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
+            <div className="login-surprise-error">
+              <i className="fas fa-exclamation-circle"></i>
               <span>{error}</span>
             </div>
           )}
 
           {/* Success Message */}
           {success && (
-            <div className="alert-message alert-success">
-              <svg className="alert-icon" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
+            <div className="login-surprise-success">
+              <i className="fas fa-check-circle"></i>
               <span>{success}</span>
             </div>
           )}
 
           {/* Email Step */}
           {step === 'email' && (
-            <form onSubmit={handleSendOTP} className="login-form">
-              <div className="form-group">
-                <label htmlFor="email" className="form-label">
-                  Email Address
-                </label>
-                <div className="input-wrapper">
-                  <div className="input-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
+            <form onSubmit={handleSendOTP} className="login-surprise-form">
+              <div className="login-surprise-input-group">
+                <div className={cn(
+                  "login-surprise-input-glow",
+                  emailFocused && "login-surprise-input-glow-active"
+                )} />
+                <div className="login-surprise-input-wrapper">
+                  <i className={cn(
+                    "fas fa-envelope login-surprise-input-icon",
+                    emailFocused && "login-surprise-input-icon-active"
+                  )} />
                   <input
                     id="email"
                     type="email"
+                    placeholder="Email Address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="form-input"
-                    placeholder="Enter your email address"
+                    onFocus={() => setEmailFocused(true)}
+                    onBlur={() => setEmailFocused(false)}
+                    className="login-surprise-input"
                     required
                     disabled={loading}
                     autoFocus
@@ -229,38 +266,34 @@ const LoginOTP: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary"
+                className="login-surprise-submit"
               >
-                {loading ? (
-                  <span className="btn-loading">
-                    <svg className="spinner" viewBox="0 0 24 24">
-                      <circle className="spinner-circle" cx="12" cy="12" r="10" />
-                    </svg>
-                    Sending OTP...
-                  </span>
-                ) : (
-                  <>
-                    <span>Send OTP</span>
-                    <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </>
-                )}
+                <span className="login-surprise-submit-content">
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Sending OTP...
+                    </>
+                  ) : (
+                    <>
+                      Send OTP
+                      <i className="fas fa-arrow-right ml-2"></i>
+                    </>
+                  )}
+                </span>
+                <div className="login-surprise-submit-glow" />
               </button>
             </form>
           )}
 
           {/* OTP Step */}
           {step === 'otp' && (
-            <form onSubmit={handleVerifyOTP} className="login-form">
-              <div className="form-group">
-                <label className="form-label text-center">
-                  Enter 6-Digit OTP
-                </label>
-                <p className="otp-email-hint">
-                  OTP sent to <span className="email-highlight">{email}</span>
+            <form onSubmit={handleVerifyOTP} className="login-surprise-form">
+              <div className="login-surprise-otp-group">
+                <p className="login-surprise-otp-hint">
+                  OTP sent to <span className="login-surprise-otp-email">{email}</span>
                 </p>
-                <div className="otp-container" onPaste={handlePaste}>
+                <div className="login-surprise-otp-container" onPaste={handlePaste}>
                   {otp.map((digit, index) => (
                     <input
                       key={index}
@@ -271,52 +304,49 @@ const LoginOTP: React.FC = () => {
                       value={digit}
                       onChange={(e) => handleOtpChange(index, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                      className="otp-input"
+                      className="login-surprise-otp-input"
                       disabled={loading}
                     />
                   ))}
                 </div>
               </div>
 
-              <div className="form-actions">
+              <div className="login-surprise-form-actions">
                 <button
                   type="button"
                   onClick={handleBackToEmail}
                   disabled={loading}
-                  className="btn-secondary"
+                  className="login-surprise-submit login-surprise-submit-secondary"
                 >
-                  <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                  </svg>
-                  <span>Back</span>
+                  <i className="fas fa-arrow-left mr-2"></i>
+                  Back
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn-primary"
+                  className="login-surprise-submit"
                 >
-                  {loading ? (
-                    <span className="btn-loading">
-                      <svg className="spinner" viewBox="0 0 24 24">
-                        <circle className="spinner-circle" cx="12" cy="12" r="10" />
-                      </svg>
-                      Verifying...
-                    </span>
-                  ) : (
-                    <>
-                      <span>Verify OTP</span>
-                      <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M5 13l4 4L19 7" />
-                      </svg>
-                    </>
-                  )}
+                  <span className="login-surprise-submit-content">
+                    {loading ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin"></i>
+                        Verifying...
+                      </>
+                    ) : (
+                      <>
+                        Verify OTP
+                        <i className="fas fa-check ml-2"></i>
+                      </>
+                    )}
+                  </span>
+                  <div className="login-surprise-submit-glow" />
                 </button>
               </div>
             </form>
           )}
 
           {/* Footer */}
-          <div className="login-footer">
+          <div className="login-surprise-footer">
             <p>&copy; {new Date().getFullYear()} Selab Nadiry Travel & Tourism. All rights reserved.</p>
           </div>
         </div>
