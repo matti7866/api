@@ -60,7 +60,12 @@ $limit = isset($_POST['limit']) ? max(1, min(100, (int)$_POST['limit'])) : 10;
 $offset = ($page - 1) * $limit;
 
 try {
-    // Build WHERE clause
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Build WHERE clause
     $where = 'WHERE 1=1';
     $params = [];
     

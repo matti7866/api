@@ -21,9 +21,25 @@ try {
         $user_id = $_SESSION['user_id'];
         $role_id = $_SESSION['role_id'] ?? null;
     } else {
-        // Try JWT token from Authorization header
-        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-        if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+        // Try JWT token from Authorization header - check multiple sources
+        $authHeader = '';
+        
+        // Method 1: Direct $_SERVER variable
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+        }
+        // Method 2: apache_request_headers() if available
+        elseif (function_exists('apache_request_headers')) {
+            $headers = apache_request_headers();
+            $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+        }
+        // Method 3: Try getallheaders()
+        elseif (function_exists('getallheaders')) {
+            $headers = getallheaders();
+            $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+        }
+        
+        if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
             $token = $matches[1];
             $decoded = JWTHelper::validateToken($token);
             if ($decoded && isset($decoded->data)) {
@@ -47,7 +63,12 @@ try {
     
     // Check permissions - Currency page or Accounts page
     try {
-        $sql = "SELECT permission.select FROM `permission` WHERE role_id = :role_id AND (page_name = 'Currency' OR page_name = 'Accounts')";
+            // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT permission.select FROM `permission` WHERE role_id = :role_id AND (page_name = 'Currency' OR page_name = 'Accounts')";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':role_id', $role_id);
         $stmt->execute();

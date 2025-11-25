@@ -51,6 +51,7 @@ try {
     // Update residence
     $sql = "UPDATE residence SET 
                 cancelled = 1,
+                current_status = 'Cancelled',
                 cancelDate = NOW(),
                 cancelRemarks = :remarks,
                 canceledBy = :canceledBy,

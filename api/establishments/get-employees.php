@@ -51,7 +51,12 @@ if ($companyID == 0) {
 }
 
 try {
-    // Get company details
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get company details
     $stmt = $pdo->prepare("SELECT * FROM company WHERE company_id = :companyID");
     $stmt->execute(['companyID' => $companyID]);
     $company = $stmt->fetch(PDO::FETCH_ASSOC);

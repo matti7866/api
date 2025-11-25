@@ -17,7 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 $user = JWTHelper::verifyRequest();
 
 try {
-    // Get customers
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get customers
     $customerSql = "SELECT customer_id, customer_name, customer_phone 
                     FROM customer 
                     WHERE status = 1 

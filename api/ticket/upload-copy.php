@@ -17,7 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $user = JWTHelper::verifyRequest();
 
 try {
-    // Log received data for debugging
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Log received data for debugging
     error_log("Upload Copy - POST data: " . json_encode($_POST));
     error_log("Upload Copy - FILES data: " . json_encode(array_keys($_FILES)));
     

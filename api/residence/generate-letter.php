@@ -41,7 +41,12 @@ if ($type === 'salary_certificate' && !$bank_id) {
 }
 
 try {
-    // Fetch residence data
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Fetch residence data
     $sql = "SELECT residence.*, airports.countryName AS nationality, position.posiiton_name AS profession
             FROM residence 
             LEFT JOIN airports ON airports.airport_id = residence.nationality

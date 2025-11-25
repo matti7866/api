@@ -27,7 +27,12 @@ if (!$userData) {
 
 // Check permission
 try {
-    $sql = "SELECT permission.update FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT permission.update FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':role_id', $userData['role_id']);
     $stmt->execute();
@@ -76,12 +81,13 @@ if ($action == 'updateFamilyStep') {
         $currentStmt = $pdo->prepare("SELECT completed_step FROM family_residence WHERE id = :id");
         $currentStmt->execute(['id' => $familyResidenceId]);
         $current = $currentStmt->fetch(PDO::FETCH_ASSOC);
-        $currentStep = $current ? (int)$current['completed_step'] : 0;
+        $currentCompletedStep = $current ? (int)$current['completed_step'] : 0;
         
-        // Calculate next step (increment by 1)
-        $nextStep = $currentStep + 1;
+        // The step parameter indicates which step we're completing
+        // After completing this step, we move to the next step
+        $nextStep = $step + 1;
         
-        // Build update query based on current step
+        // Build update query based on which step is being completed
         $fields = [];
         $params = [];
         
@@ -89,7 +95,7 @@ if ($action == 'updateFamilyStep') {
         $datetime = new DateTime('now', new DateTimeZone('Asia/Dubai'));
         $dubaiDateTime = $datetime->format('Y-m-d H:i:s');
         
-        switch ($currentStep) {
+        switch ($step) {
             case 1: // E-Visa
                 $cost = isset($_POST['cost']) ? (float)$_POST['cost'] : 0;
                 $account = isset($_POST['account']) ? (int)$_POST['account'] : null;

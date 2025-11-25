@@ -20,7 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    // Get JSON input
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get JSON input
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!$input || !isset($input['username']) || !isset($input['password'])) {

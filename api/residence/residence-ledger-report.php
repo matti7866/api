@@ -2,12 +2,11 @@
 // Include CORS headers
 require_once __DIR__ . '/../cors-headers.php';
 
-
 /**
  * Residence Ledger Report API
  * Endpoint: /api/residence/residence-ledger-report.php
  * Returns detailed residence ledger for a customer/currency
- * Replicates GetResidenceReport from residenceLedgerController.php
+ * EXACT COPY from residenceLedgerController.php GetResidenceReport
  */
 
 // Handle OPTIONS request for CORS
@@ -72,13 +71,11 @@ try {
         $customChargesTableExists = false;
     }
     
-    // SQL Query - Get residence records with proper balance calculations including ILOE, TAWJEEH, and Custom Charges
-    // UNION with family residence records
+    // EXACT COPY from old residenceLedgerController.php - GetResidenceReport
     $customChargesQuery = $customChargesTableExists ? 
         "IFNULL((SELECT SUM(rcc.sale_price) FROM residence_custom_charges rcc 
             WHERE rcc.residence_id = r.residenceID), 0)" : "0";
     
-    // Regular residence records
     $sql = "SELECT 
         r.residenceID,
         r.passenger_name as main_passenger,
@@ -94,20 +91,16 @@ try {
         CASE 
             WHEN r.current_status = 'cancelled' OR r.current_status = 'cancelled & replaced' THEN 
                 (IFNULL((SELECT SUM(cp.payment_amount) FROM customer_payments cp 
-                    WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID 
-                    AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)), 0) +
+                    WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID), 0) +
                  IFNULL((SELECT SUM(cp.payment_amount) FROM customer_payments cp 
-                    WHERE cp.residenceCancelPayment = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID 
-                    AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)), 0))
+                    WHERE cp.residenceCancelPayment = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID), 0))
             ELSE 
                 IFNULL((SELECT SUM(cp.payment_amount) FROM customer_payments cp 
-                    WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID 
-                    AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)), 0)
+                    WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID), 0)
         END AS residencePayment,
         IFNULL((SELECT SUM(cp.payment_amount) FROM customer_payments cp 
             JOIN residencefine rf ON rf.residenceFineID = cp.residenceFinePayment
-            WHERE rf.residenceID = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID 
-            AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)), 0) AS finePayment,
+            WHERE rf.residenceID = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID), 0) AS finePayment,
         r.current_status,
         IFNULL((SELECT SUM(rc.cancellation_charges) FROM residence_cancellation rc 
             WHERE rc.residence = r.residenceID AND rc.customer_id = :id), 0) AS cancellation_charges,
@@ -117,8 +110,7 @@ try {
             ELSE 0 
         END AS tawjeeh_charges,
         IFNULL((SELECT SUM(cp.tawjeeh_payment_amount) FROM customer_payments cp 
-            WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID 
-            AND cp.is_tawjeeh_payment = 1 AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)), 0) AS tawjeeh_payments,
+            WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID AND cp.is_tawjeeh_payment = 1), 0) AS tawjeeh_payments,
         -- ILOE charges and payments
         CASE 
             WHEN IFNULL(rch.insurance_included_in_sale, 0) = 0 THEN 
@@ -126,52 +118,16 @@ try {
             ELSE IFNULL(rch.insurance_fine, 0)
         END AS iloe_charges,
         (IFNULL((SELECT SUM(cp.insurance_payment_amount) FROM customer_payments cp 
-            WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID 
-            AND cp.is_insurance_payment = 1 AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)), 0) +
+            WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID AND cp.is_insurance_payment = 1), 0) +
          IFNULL((SELECT SUM(cp.insurance_fine_payment_amount) FROM customer_payments cp 
-            WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID 
-            AND cp.is_insurance_fine_payment = 1 AND (cp.family_res_payment IS NULL OR cp.family_res_payment = 0)), 0)) AS iloe_payments,
+            WHERE cp.PaymentFor = r.residenceID AND cp.customer_id = :id AND cp.currencyID = :CurID AND cp.is_insurance_fine_payment = 1), 0)) AS iloe_payments,
         -- Custom charges
-        " . $customChargesQuery . " AS custom_charges,
-        0 AS is_family_residence,
-        NULL AS familyResidenceID,
-        NULL AS main_residence_id
+        " . $customChargesQuery . " AS custom_charges
     FROM residence r
     LEFT JOIN residence_charges rch ON rch.residence_id = r.residenceID
     WHERE r.customer_id = :id 
     AND r.saleCurID = :CurID
-    
-    UNION ALL
-    
-    -- Family residence records
-    SELECT 
-        fr.id as residenceID,
-        fr.passenger_name as main_passenger,
-        IFNULL((SELECT countryName FROM airports WHERE airports.airport_id = fr.nationality), 'N/A') AS nationality,
-        IFNULL((SELECT IFNULL(company_name,'') FROM company WHERE company.company_id = r_main.company LIMIT 1),'') AS company_name,
-        COALESCE(DATE(r_main.datetime), DATE(NOW())) AS dt,
-        fr.sale_price,
-        0 AS fine,
-        -- Family residence payments (ONLY where family_res_payment = 1)
-        IFNULL((SELECT SUM(cp.payment_amount) FROM customer_payments cp 
-            WHERE cp.PaymentFor = fr.id AND cp.customer_id = :id AND cp.currencyID = :CurID 
-            AND cp.family_res_payment = 1), 0) AS residencePayment,
-        0 AS finePayment,
-        IFNULL(fr.status, 'active') AS current_status,
-        0 AS cancellation_charges,
-        0 AS tawjeeh_charges,
-        0 AS tawjeeh_payments,
-        0 AS iloe_charges,
-        0 AS iloe_payments,
-        0 AS custom_charges,
-        1 AS is_family_residence,
-        fr.id AS familyResidenceID,
-        fr.residence_id AS main_residence_id
-    FROM family_residence fr
-    LEFT JOIN residence r_main ON r_main.residenceID = fr.residence_id
-    WHERE fr.customer_id = :id
-    
-    ORDER BY dt ASC";
+    ORDER BY r.datetime ASC";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $customerID);
@@ -179,29 +135,29 @@ try {
     $stmt->execute();
     $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Calculate totals from ALL records (including family residences)
-    // Filter records to only show those with outstanding balance > 0 (including ILOE, TAWJEEH, and Custom Charges)
-    // BUT: Always show family residence records if they have charges, even if fully paid
+    // Filter records to only show those with outstanding balance > 0 (EXACT COPY from old file)
     $filteredRecords = [];
+    foreach ($records as $record) {
+        $totalCharges = floatval($record['sale_price']) + floatval($record['fine']) + floatval($record['cancellation_charges']) 
+                      + floatval($record['tawjeeh_charges']) + floatval($record['iloe_charges']) + floatval($record['custom_charges']);
+        $totalPayments = floatval($record['residencePayment']) + floatval($record['finePayment']) 
+                       + floatval($record['tawjeeh_payments']) + floatval($record['iloe_payments']);
+        $balance = $totalCharges - $totalPayments;
+        
+        if ($balance > 0) {
+            $filteredRecords[] = $record;
+        }
+    }
+    
+    // Calculate totals (sum ALL filtered records)
     $totalCharges = 0;
     $totalPaid = 0;
     
-    foreach ($records as $record) {
-        $isFamilyResidence = isset($record['is_family_residence']) && (intval($record['is_family_residence']) === 1 || $record['is_family_residence'] === '1');
-        $recordCharges = floatval($record['sale_price']) + floatval($record['fine']) + floatval($record['cancellation_charges']) 
+    foreach ($filteredRecords as $record) {
+        $totalCharges += floatval($record['sale_price']) + floatval($record['fine']) + floatval($record['cancellation_charges']) 
                       + floatval($record['tawjeeh_charges']) + floatval($record['iloe_charges']) + floatval($record['custom_charges']);
-        $recordPayments = floatval($record['residencePayment']) + floatval($record['finePayment']) 
-                       + floatval($record['tawjeeh_payments']) + floatval($record['iloe_payments']);
-        $balance = $recordCharges - $recordPayments;
-        
-        // Calculate totals from ALL records (both regular and family residences)
-        $totalCharges += $recordCharges;
-        $totalPaid += $recordPayments;
-        
-        // Show records with outstanding balance > 0 OR ALL family residences (to show dependents)
-        if ($balance > 0 || $isFamilyResidence) {
-            $filteredRecords[] = $record;
-        }
+        $totalPaid += floatval($record['residencePayment']) + floatval($record['finePayment']) 
+                   + floatval($record['tawjeeh_payments']) + floatval($record['iloe_payments']);
     }
     
     // Get total count before pagination
@@ -233,4 +189,3 @@ try {
     error_log('Residence Ledger Report API Error: ' . $e->getMessage());
     JWTHelper::sendResponse(500, false, 'Error retrieving residence ledger: ' . $e->getMessage());
 }
-

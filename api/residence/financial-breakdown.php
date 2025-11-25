@@ -32,7 +32,12 @@ if (!$residenceID) {
 }
 
 try {
-    // Get residence details from residence table AND residence_charges table
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get residence details from residence table AND residence_charges table
     $sql = "SELECT 
                 r.sale_price,
                 r.saleCurID,

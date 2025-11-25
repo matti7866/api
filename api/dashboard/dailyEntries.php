@@ -21,7 +21,12 @@ if (!$userData) {
 
 // Check if user is Admin
 try {
-    $sql = "SELECT role_name FROM `roles` WHERE role_id = :role_id";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT role_name FROM `roles` WHERE role_id = :role_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':role_id', $userData['role_id']);
     $stmt->execute();

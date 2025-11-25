@@ -35,7 +35,12 @@ if ($method === 'GET') {
     }
     
     try {
-        // Get residence details
+            // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get residence details
         $resQuery = $pdo->prepare("SELECT r.sale_price, r.saleCurID, r.customer_id, r.current_status,
                                            rch.tawjeeh_amount, rch.insurance_amount, rch.insurance_fine,
                                            rch.tawjeeh_included_in_sale, rch.insurance_included_in_sale,

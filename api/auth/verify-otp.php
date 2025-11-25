@@ -34,18 +34,30 @@ try {
     $email = trim($input['email']);
     $otp = trim($input['otp']);
     
+    // Log verification attempt
+    $logFile = __DIR__ . '/../../logs/otp_log.txt';
+    @file_put_contents($logFile, date('Y-m-d H:i:s') . " - Verification attempt for $email with OTP: $otp\n", FILE_APPEND);
+    
     // Get user with OTP (status = 1 means active)
+    // Use LOWER() for case-insensitive email matching
     $query = "SELECT s.staff_id, s.staff_name, s.staff_email, s.staff_pic, 
                      s.role_id, r.role_name, s.otp, s.otp_expiry
               FROM staff s
               LEFT JOIN roles r ON s.role_id = r.role_id
-              WHERE s.staff_email = :email
+              WHERE LOWER(s.staff_email) = LOWER(:email)
               AND s.status = 1
               LIMIT 1";
     
     $stmt = $pdo->prepare($query);
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Log what was found
+    if ($user) {
+        @file_put_contents($logFile, date('Y-m-d H:i:s') . " - User found. Stored OTP: " . ($user['otp'] ?? 'NULL') . ", Expiry: " . ($user['otp_expiry'] ?? 'NULL') . "\n", FILE_APPEND);
+    } else {
+        @file_put_contents($logFile, date('Y-m-d H:i:s') . " - User NOT found for email: $email\n", FILE_APPEND);
+    }
     
     if (!$user) {
         JWTHelper::sendResponse([
@@ -56,6 +68,9 @@ try {
     
     // Check if OTP exists
     if (empty($user['otp']) || empty($user['otp_expiry'])) {
+        // Log for debugging
+        error_log("OTP Verification Failed - No OTP found for email: $email. OTP: " . ($user['otp'] ?? 'NULL') . ", Expiry: " . ($user['otp_expiry'] ?? 'NULL'));
+        
         JWTHelper::sendResponse([
             'success' => false,
             'message' => 'No OTP found. Please request a new one.'
@@ -97,11 +112,16 @@ try {
     if (!empty($user['staff_pic'])) {
         // Build full URL for staff picture
         if (strpos($user['staff_pic'], 'http') === 0) {
-            // Already a full URL
-            $user['staff_pic'] = convertToProductionUrl($user['staff_pic']);
+            // Already a full URL - ensure HTTPS
+            if (strpos($user['staff_pic'], 'http://') === 0) {
+                $user['staff_pic'] = str_replace('http://', 'https://', $user['staff_pic']);
+            }
         } else {
-            // Relative path - make it absolute
-            $user['staff_pic'] = BASE_URL . '/' . ltrim($user['staff_pic'], '/');
+            // Relative path - make it absolute with HTTPS
+            $protocol = 'https'; // Always use HTTPS for production
+            $host = $_SERVER['HTTP_HOST'] ?? 'app.sntrips.com';
+            $baseUrl = $protocol . '://' . $host;
+            $user['staff_pic'] = $baseUrl . '/' . ltrim($user['staff_pic'], '/');
         }
     }
     

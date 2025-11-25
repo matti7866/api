@@ -90,7 +90,13 @@ try {
             residence.document_verify_datetime,
             residence.document_verify_message,
             residence.remarks,
-            (SELECT IFNULL(SUM(payment_amount),0) FROM customer_payments WHERE PaymentFor = residence.residenceID) as paid_amount
+            (SELECT IFNULL(SUM(payment_amount),0) FROM customer_payments 
+             WHERE PaymentFor = residence.residenceID 
+             AND (payment_type IS NULL OR payment_type NOT IN ('insurance', 'insurance_fine', 'tawjeeh', 'cancellation'))
+             AND (is_tawjeeh_payment IS NULL OR is_tawjeeh_payment = 0)
+             AND (is_insurance_payment IS NULL OR is_insurance_payment = 0)
+             AND (is_insurance_fine_payment IS NULL OR is_insurance_fine_payment = 0)
+             AND (residenceCancelPayment IS NULL OR residenceCancelPayment = 0)) as paid_amount
         FROM residence 
         LEFT JOIN customer ON customer.customer_id = residence.customer_id
         LEFT JOIN airports ON airports.airport_id = residence.Nationality

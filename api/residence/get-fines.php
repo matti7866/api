@@ -32,7 +32,12 @@ if (!$residenceID) {
 }
 
 try {
-    // Get all fines for this residence
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get all fines for this residence
     $sql = "SELECT 
                 rf.residenceFineID,
                 rf.residenceID,

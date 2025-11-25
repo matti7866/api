@@ -62,8 +62,8 @@ try {
     $stmt = $pdo->query("SELECT account_ID, account_Name FROM accounts ORDER BY account_Name");
     $lookups['accounts'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Customers (active only, limit to recent 100 for performance)
-    $stmt = $pdo->query("SELECT customer_id, customer_name, customer_phone, customer_email FROM customer WHERE status = 1 ORDER BY time_creation DESC LIMIT 100");
+    // Customers (all active customers, ordered alphabetically)
+    $stmt = $pdo->query("SELECT customer_id, customer_name, customer_phone, customer_email FROM customer WHERE status = 1 ORDER BY customer_name ASC");
     $lookups['customers'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     JWTHelper::sendResponse(200, true, 'Success', $lookups);

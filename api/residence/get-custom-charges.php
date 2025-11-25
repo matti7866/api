@@ -32,7 +32,12 @@ if (!$residenceID) {
 }
 
 try {
-    // Check if table exists first
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Check if table exists first
     try {
         $tableCheck = $pdo->query("SHOW TABLES LIKE 'residence_custom_charges'");
         if ($tableCheck->rowCount() == 0) {

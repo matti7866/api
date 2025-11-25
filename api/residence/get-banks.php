@@ -27,7 +27,12 @@ if (!$userData) {
 
 try {
 
-    // Check if banks table exists
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Check if banks table exists
     $checkTable = $pdo->prepare("SHOW TABLES LIKE 'banks'");
     $checkTable->execute();
     

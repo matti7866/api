@@ -17,7 +17,12 @@ if (!$user) {
 }
 
 try {
-    // Get all dropdown data in one request
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get all dropdown data in one request
     
     // 1. Customers
     $custStmt = $pdo->prepare("SELECT customer_id, customer_name, customer_phone, customer_whatsapp, customer_address 

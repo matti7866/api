@@ -26,7 +26,12 @@ if (!$userData) {
 
 // Check permission
 try {
-    $sql = "SELECT permission.delete FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT permission.delete FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':role_id', $userData['role_id']);
     $stmt->execute();

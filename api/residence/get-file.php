@@ -31,7 +31,12 @@ if (!$fileID) {
 }
 
 try {
-    // Get file information from database
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get file information from database
     $sql = "SELECT file_name, original_name, ResID 
             FROM residencedocuments 
             WHERE ResidenceDocID = :fileID";

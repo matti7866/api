@@ -17,7 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
 $user = JWTHelper::verifyRequest();
 
 try {
-    // Get JSON input
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get JSON input
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!isset($input['visa_id'])) {

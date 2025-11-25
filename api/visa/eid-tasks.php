@@ -22,7 +22,12 @@ $step = isset($_GET['step']) ? (string)$_GET['step'] : 'pending';
 $dateAfter = '2024-09-01';
 
 try {
-    // Build WHERE clause based on step
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Build WHERE clause based on step
     $where = '';
     
     if ($step == 'pending') {

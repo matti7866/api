@@ -13,7 +13,12 @@ if (!$user) {
 }
 
 try {
-    $input = json_decode(file_get_contents('php://input'), true);
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$input = json_decode(file_get_contents('php://input'), true);
     
     if (!isset($input['ticket_id'])) {
         JWTHelper::sendResponse(['success' => false, 'message' => 'Ticket ID required'], 400);

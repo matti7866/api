@@ -17,7 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $user = JWTHelper::verifyRequest();
 
 try {
-    // Validate required fields
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Validate required fields
     if (!isset($_POST['visa_id']) || !isset($_FILES['visaCopy'])) {
         JWTHelper::sendResponse([
             'success' => false,

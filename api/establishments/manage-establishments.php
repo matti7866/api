@@ -8,7 +8,12 @@ require_once __DIR__ . '/../../connection.php';
 header('Content-Type: application/json');
 
 try {
-    // Create company_files table if it doesn't exist
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Create company_files table if it doesn't exist
     try {
         $pdo->exec("CREATE TABLE IF NOT EXISTS company_files (
             file_id INT AUTO_INCREMENT PRIMARY KEY,

@@ -50,7 +50,12 @@ if (!$user_id) {
 }
 
 try {
-    // Get companies
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get companies
     $sql = "SELECT company_id, company_name FROM `company` ORDER BY company_name ASC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();

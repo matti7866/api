@@ -16,7 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    // Verify JWT token
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Verify JWT token
     $userData = JWTHelper::verifyRequest();
     
     if (!$userData) {

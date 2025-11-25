@@ -51,7 +51,12 @@ if ($residenceID == 0) {
 }
 
 try {
-    // Update residence to cancelled
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Update residence to cancelled
     $stmt = $pdo->prepare("UPDATE residence SET cancelled = 1 WHERE residenceID = :residenceID");
     $stmt->execute(['residenceID' => $residenceID]);
     

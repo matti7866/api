@@ -29,7 +29,12 @@ if ($currencyID == 0) {
 }
 
 try {
-    $sql = "SELECT currencyName FROM currency WHERE currencyID = :id";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT currencyName FROM currency WHERE currencyID = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $currencyID);
     $stmt->execute();

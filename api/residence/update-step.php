@@ -27,7 +27,12 @@ if (!$userData) {
 
 // Check permission
 try {
-    $sql = "SELECT permission.update FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT permission.update FROM `permission` WHERE role_id = :role_id AND page_name = 'Residence'";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':role_id', $userData['role_id']);
     $stmt->execute();
@@ -493,11 +498,13 @@ try {
         $LabourCardNumber = isset($_POST['LabourCardNumber']) ? trim($_POST['LabourCardNumber']) : null;
         $expiry_date = isset($_POST['expiry_date']) ? $_POST['expiry_date'] : null;
         
-        // Handle charged entity
+        // Handle charged entity - support both old (without "ing") and new (with "ing") field names
         $visaStampingSupplier = null;
         $visaStampingAccount = null;
-        $chargedOpt = isset($_POST['visaStampChargOpt']) ? (int)$_POST['visaStampChargOpt'] : null;
-        $chargedEntity = isset($_POST['visaStampChargedEntity']) ? (int)$_POST['visaStampChargedEntity'] : null;
+        $chargedOpt = isset($_POST['visaStampingChargOpt']) ? (int)$_POST['visaStampingChargOpt'] : 
+                      (isset($_POST['visaStampChargOpt']) ? (int)$_POST['visaStampChargOpt'] : null);
+        $chargedEntity = isset($_POST['visaStampingChargedEntity']) ? (int)$_POST['visaStampingChargedEntity'] : 
+                         (isset($_POST['visaStampChargedEntity']) ? (int)$_POST['visaStampChargedEntity'] : null);
         
         if ($chargedOpt == 1) {
             $visaStampingAccount = $chargedEntity;
@@ -508,6 +515,7 @@ try {
         $sql = "UPDATE `residence` SET 
                 visaStampingCost=:visaStampingCost,
                 visaStampingCur=:visaStampingCur,
+                visaStampingDate=NOW(),
                 visaStampingSupplier=:visaStampingSupplier,
                 visaStampingAccount=:visaStampingAccount,
                 LabourCardNumber=:LabourCardNumber,

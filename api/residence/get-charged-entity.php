@@ -41,7 +41,12 @@ if (!$residenceID || !$type) {
 }
 
 try {
-    // Map type to database fields
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Map type to database fields
     $typeFields = [
         'offerLetter' => ['supplier' => 'offerLetterSupplier', 'account' => 'offerLetterAccount'],
         'LaborCard' => ['supplier' => 'laborCardSupplier', 'account' => 'laborCardAccount'],

@@ -17,7 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $user = JWTHelper::verifyRequest();
 
 try {
-    // Check if data is coming as FormData or JSON
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Check if data is coming as FormData or JSON
     if (!empty($_POST)) {
         $input = $_POST;
     } else {

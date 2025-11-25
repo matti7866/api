@@ -36,7 +36,12 @@ try {
 }
 
 try {
-    // Get today's statistics
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+// Get today's statistics
     $selectQuery = $pdo->prepare("SELECT 
         (SELECT COUNT(ticket.ticket) FROM ticket WHERE DATE(ticket.datetime) = CURRENT_DATE) AS Todays_Ticket,
         (SELECT IFNULL(SUM(ticket.Sale),0) - IFNULL(SUM(ticket.net_price),0) FROM ticket WHERE DATE(ticket.datetime) = CURRENT_DATE) AS ticket_profit,

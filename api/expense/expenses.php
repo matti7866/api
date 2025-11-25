@@ -71,7 +71,7 @@ try {
     
     // Create expense
     if ($action == 'createExpense') {
-        $staff_id = $user['user_id'];
+        $staff_id = $user['staff_id'];
         $expense_type_id = isset($input['expense_type_id']) ? trim($input['expense_type_id']) : null;
         $expense_amount = isset($input['expense_amount']) ? trim($input['expense_amount']) : null;
         $currency_id = isset($input['currency_id']) ? trim($input['currency_id']) : null;
@@ -338,7 +338,7 @@ try {
             ]);
         }
         
-        $staff_id = $user['user_id'];
+        $staff_id = $user['staff_id'];
         
         try {
             $sql = "UPDATE `expense` SET expense_type_id = :expense_type_id, expense_amount = :expense_amount,
@@ -485,7 +485,7 @@ function uploadExpenseDocument($file) {
     
     $f_name = pathinfo($file['name'], PATHINFO_FILENAME);
     $newFileName = md5($f_name . '_' . date('YmdHis')) . '.' . $extension;
-    $uploadDir = __DIR__ . '/../../../expense_documents/';
+    $uploadDir = __DIR__ . '/../../expense_documents/';
     
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);

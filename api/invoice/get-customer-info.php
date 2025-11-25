@@ -29,7 +29,12 @@ if ($customerID == 0) {
 }
 
 try {
-    $sql = "SELECT customer_name, customer_phone, customer_email FROM `customer` WHERE customer_id = :id";
+        // Database connection check
+    if (!isset($pdo) || $pdo === null) {
+        throw new Exception('Database connection not available');
+    }
+    
+$sql = "SELECT customer_name, customer_phone, customer_email FROM `customer` WHERE customer_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id', $customerID);
     $stmt->execute();
