@@ -5,9 +5,10 @@
 Your API folder is now connected to: **https://github.com/matti7866/api.git**
 
 ### Current Setup
-- **Branch**: `react-push`
+- **Branch**: `main`
 - **Remote**: `origin` → `matti7866/api`
-- **Tracking**: Local `react-push` tracks `origin/react-push`
+- **Tracking**: Local `main` tracks `origin/main`
+- **Location**: `/Applications/XAMPP/xamppfiles/htdocs/snt/api/` (separate repo)
 
 ## Daily Workflow for API Updates
 
@@ -82,4 +83,4 @@ git pull
 ---
 **Last Updated**: November 25, 2025
 **Repository**: matti7866/api
-**Branch**: react-push
+**Branch**: main
