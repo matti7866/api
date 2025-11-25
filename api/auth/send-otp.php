@@ -48,12 +48,24 @@ require_once __DIR__ . '/../cors-headers.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 
-require_once __DIR__ . '/../../connection.php';
+// Check if connection.php exists in parent directory (local) or api directory (production)
+if (file_exists(__DIR__ . '/../../connection.php')) {
+    require_once __DIR__ . '/../../connection.php';
+} else {
+    require_once __DIR__ . '/../connection.php';
+}
+
 require_once __DIR__ . '/JWTHelper.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require __DIR__ . '/../../vendor/autoload.php';
+
+// Check if vendor exists in parent directory (local) or api directory (production)
+if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+    require __DIR__ . '/../../vendor/autoload.php';
+} else {
+    require __DIR__ . '/../vendor/autoload.php';
+}
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -124,7 +136,10 @@ try {
     $saved = $verifyStmt->fetch(PDO::FETCH_ASSOC);
     
     // Log OTP generation
-    $logFile = __DIR__ . '/../../logs/otp_log.txt';
+    // Check if logs directory exists in parent (local) or api directory (production)
+    $logFile = file_exists(__DIR__ . '/../../logs') 
+        ? __DIR__ . '/../../logs/otp_log.txt'
+        : __DIR__ . '/../logs/otp_log.txt';
     $logDir = dirname($logFile);
     if (!is_dir($logDir)) {
         @mkdir($logDir, 0755, true);

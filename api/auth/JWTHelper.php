@@ -2,8 +2,12 @@
 // Include CORS headers
 require_once __DIR__ . '/../cors-headers.php';
 
-
-require_once __DIR__ . '/../../vendor/autoload.php';
+// Check if vendor exists in parent directory (local) or api directory (production)
+if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+    require_once __DIR__ . '/../../vendor/autoload.php';
+} else {
+    require_once __DIR__ . '/../vendor/autoload.php';
+}
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;

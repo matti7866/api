@@ -4,7 +4,13 @@ require_once __DIR__ . '/../cors-headers.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 
-require_once __DIR__ . '/../../connection.php';
+// Check if connection.php exists in parent directory (local) or api directory (production)
+if (file_exists(__DIR__ . '/../../connection.php')) {
+    require_once __DIR__ . '/../../connection.php';
+} else {
+    require_once __DIR__ . '/../connection.php';
+}
+
 require_once __DIR__ . '/JWTHelper.php';
 
 // Only allow POST requests
@@ -35,7 +41,10 @@ try {
     $otp = trim($input['otp']);
     
     // Log verification attempt
-    $logFile = __DIR__ . '/../../logs/otp_log.txt';
+    // Check if logs directory exists in parent (local) or api directory (production)
+    $logFile = file_exists(__DIR__ . '/../../logs') 
+        ? __DIR__ . '/../../logs/otp_log.txt'
+        : __DIR__ . '/../logs/otp_log.txt';
     @file_put_contents($logFile, date('Y-m-d H:i:s') . " - Verification attempt for $email with OTP: $otp\n", FILE_APPEND);
     
     // Get user with OTP (status = 1 means active)
