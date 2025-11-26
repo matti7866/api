@@ -10,7 +10,7 @@ ini_set('log_errors', 1);
 header('Content-Type: application/json');
 
 try {
-    require_once __DIR__ . '/../../connection.php';
+    require_once __DIR__ . '/../connection/index.php';
     require_once __DIR__ . '/../auth/JWTHelper.php';
 } catch (Exception $e) {
     http_response_code(500);
