@@ -40,20 +40,39 @@ $dateAfter = '2024-09-01';
 
 try {
     // Build WHERE clause based on step
+    // NEW LOGIC: completedStep represents "steps completed", so:
+    // - Step 1: completedStep = 0 (on step 1, nothing done yet)
+    // - Step 2: completedStep = 1 (on step 2, step 1 done)
+    // - Step 6: completedStep = 5 (on step 6, steps 1-5 done)
+    
     $where = '';
     $params = [];
     
     if ($step == '1a') {
-        $where = " AND completedStep = 2 AND offerLetterStatus = 'submitted' ";
+        // Offer Letter Submitted - completedStep = 1, status = submitted
+        $where = " AND completedStep = 1 AND offerLetterStatus = 'submitted' ";
     } elseif ($step == '4a') {
-        $where = " AND completedStep = 5 AND (eVisaStatus = 'submitted' OR eVisaStatus = 'rejected') ";
+        // E-Visa Submitted - completedStep = 4, status = submitted/rejected
+        $where = " AND completedStep = 4 AND (eVisaStatus = 'submitted' OR eVisaStatus = 'rejected') ";
     } elseif ($step == '2') {
-        $where = " AND completedStep = 2 AND offerLetterStatus = 'accepted'";
+        // Insurance - completedStep = 1, offer letter accepted
+        $where = " AND completedStep = 1 AND offerLetterStatus = 'accepted'";
     } elseif ($step == '5') {
-        $where = " AND completedStep = 5 AND eVisaStatus = 'accepted' ";
+        // Change Status - completedStep = 4, eVisa accepted
+        $where = " AND completedStep = 4 AND eVisaStatus = 'accepted' ";
+    } elseif ($step == '10') {
+        // Completed - completedStep = 10
+        $where = " AND completedStep = 10 ";
     } else {
+        // For other steps: show residences where completedStep = step - 1
+        // This means they're ON that step, but haven't completed it yet
+        $targetCompletedStep = (int)$step - 1;
+        if ($targetCompletedStep < 0) $targetCompletedStep = 0;
+        
         $where = " AND completedStep = :step ";
-        $params[':step'] = (int)$step;
+        $params[':step'] = $targetCompletedStep;
+        
+        error_log("TASKS FILTER: Step $step → Filtering by completedStep = $targetCompletedStep");
     }
 
     if ($company_id > 0) {
@@ -163,19 +182,35 @@ try {
     $countStmt->execute();
     $counts = $countStmt->fetchAll(PDO::FETCH_ASSOC);
     
+    // Map completedStep values to step keys
+    // completedStep 0 → Step 1, completedStep 1 → Step 2, etc.
+    $completedStepToStepKey = [
+        '0' => '1',   // completedStep 0 = On Step 1 (Offer Letter)
+        '1' => '2',   // completedStep 1 = On Step 2 (Insurance) - unless status says otherwise
+        '2' => '3',   // completedStep 2 = On Step 3 (Labour Card)
+        '3' => '4',   // completedStep 3 = On Step 4 (E-Visa)
+        '4' => '5',   // completedStep 4 = On Step 5 (Change Status) - unless status says otherwise
+        '5' => '6',   // completedStep 5 = On Step 6 (Medical)
+        '6' => '7',   // completedStep 6 = On Step 7 (EID)
+        '7' => '8',   // completedStep 7 = On Step 8 (Visa Stamping)
+        '8' => '9',   // completedStep 8 = On Step 9 (Contract Submission)
+        '10' => '10'  // completedStep 10 = On Step 10 (Completed)
+    ];
+    
     foreach ($counts as $row) {
-        $stepKey = (string)$row['completedStep'];
+        $completedStepValue = (string)$row['completedStep'];
+        $stepKey = isset($completedStepToStepKey[$completedStepValue]) ? $completedStepToStepKey[$completedStepValue] : $completedStepValue;
         if (isset($stepCounts[$stepKey])) {
             $stepCounts[$stepKey] = (int)$row['count'];
         }
     }
     
-    // Count offer letter submitted (step 1a)
+    // Count offer letter submitted (step 1a) - completedStep = 1
     $sql1a = "
         SELECT IFNULL(COUNT(*),0) as total 
         FROM residence 
         WHERE DATE(datetime) >= :dateAfter 
-        AND completedStep = 2 
+        AND completedStep = 1 
         AND offerLetterStatus = 'submitted' 
         AND current_status = 'Active' 
         AND res_type = 'mainland'
@@ -193,12 +228,12 @@ try {
     $stmt1a->execute();
     $stepCounts['1a'] = (int)$stmt1a->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Count insurance (step 2) - offer letter accepted
+    // Count insurance (step 2) - offer letter accepted, completedStep = 1
     $sql2 = "
         SELECT IFNULL(COUNT(*),0) as total 
         FROM residence 
         WHERE DATE(datetime) >= :dateAfter 
-        AND completedStep = 2 
+        AND completedStep = 1 
         AND offerLetterStatus = 'accepted' 
         AND current_status = 'Active' 
         AND res_type = 'mainland'
@@ -216,12 +251,12 @@ try {
     $stmt2->execute();
     $stepCounts['2'] = (int)$stmt2->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Count eVisa submitted (step 4a)
+    // Count eVisa submitted (step 4a) - completedStep = 4
     $sql4a = "
         SELECT IFNULL(COUNT(*),0) as total 
         FROM residence 
         WHERE DATE(datetime) >= :dateAfter 
-        AND completedStep = 5 
+        AND completedStep = 4 
         AND eVisaStatus = 'submitted' 
         AND current_status = 'Active' 
         AND res_type = 'mainland'
@@ -239,12 +274,12 @@ try {
     $stmt4a->execute();
     $stepCounts['4a'] = (int)$stmt4a->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Count change status (step 5) - eVisa accepted
+    // Count change status (step 5) - eVisa accepted, completedStep = 4
     $sql5 = "
         SELECT IFNULL(COUNT(*),0) as total 
         FROM residence 
         WHERE DATE(datetime) >= :dateAfter 
-        AND completedStep = 5 
+        AND completedStep = 4 
         AND eVisaStatus = 'accepted' 
         AND current_status = 'Active' 
         AND res_type = 'mainland'
