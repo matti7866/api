@@ -175,64 +175,40 @@ if ($action == 'moveResidenceToStep') {
     }
 
     try {
-        // NEW LOGIC: When moving to a step, set completedStep to ONE LESS than target
-        // This means you're ON that step, but it's not marked as completed yet
-        // Step is only marked completed when you actually SAVE data to it
-        
+        // Map step names to completedStep values (REVERTED TO ORIGINAL)
         $stepMapping = [
-            '1' => 0,      // Moving TO step 1 → completedStep = 0 (nothing done yet)
-            '1a' => 1,     // Moving TO step 1a → completedStep = 1 (offer letter done, pending submission)
-            '2' => 1,      // Moving TO step 2 → completedStep = 1 (on insurance, offer letter must be done)
-            '3' => 2,      // Moving TO step 3 → completedStep = 2 (on labour card)
-            '4' => 3,      // Moving TO step 4 → completedStep = 3 (on e-visa)
-            '4a' => 4,     // Moving TO step 4a → completedStep = 4 (e-visa done, pending acceptance)
-            '5' => 4,      // Moving TO step 5 → completedStep = 4 (on change status)
-            '6' => 5,      // Moving TO step 6 (Medical) → completedStep = 5 (NOT 7!)
-            '7' => 6,      // Moving TO step 7 → completedStep = 6
-            '8' => 7,      // Moving TO step 8 → completedStep = 7
-            '9' => 8,      // Moving TO step 9 → completedStep = 8
-            '10' => 10     // Moving TO step 10 (Completed) → completedStep = 10
+            '1' => 1,      // Offer Letter
+            '1a' => 2,    // Offer Letter Submitted (needs acceptance)
+            '2' => 3,     // Insurance
+            '3' => 4,     // Labour Card
+            '4' => 5,     // E-Visa
+            '4a' => 5,    // E-Visa Submitted (needs acceptance)
+            '5' => 6,     // Change Status
+            '6' => 7,     // Medical
+            '7' => 8,     // Emirates ID
+            '8' => 9,     // Visa Stamping
+            '9' => 10,    // Contract Submission
+            '10' => 10    // Completed
         ];
 
-        $completedStep = isset($stepMapping[$targetStep]) ? $stepMapping[$targetStep] : (int)$targetStep - 1;
+        $completedStep = isset($stepMapping[$targetStep]) ? $stepMapping[$targetStep] : (int)$targetStep;
         
         // Handle special cases for step 1a and 4a
         if ($targetStep == '1a') {
-            // Set to step 1 (offer letter completed) and mark as submitted
-            $stmt = $pdo->prepare("UPDATE residence SET completedStep = 1, offerLetterStatus = 'submitted' WHERE residenceID = :id");
+            // Set to step 2 and mark offer letter as submitted
+            $stmt = $pdo->prepare("UPDATE residence SET completedStep = 2, offerLetterStatus = 'submitted' WHERE residenceID = :id");
             $stmt->execute(['id' => $id]);
         } elseif ($targetStep == '4a') {
-            // Set to step 4 (e-visa completed) and mark as submitted
-            $stmt = $pdo->prepare("UPDATE residence SET completedStep = 4, eVisaStatus = 'submitted' WHERE residenceID = :id");
+            // Set to step 5 and mark eVisa as submitted
+            $stmt = $pdo->prepare("UPDATE residence SET completedStep = 5, eVisaStatus = 'submitted' WHERE residenceID = :id");
             $stmt->execute(['id' => $id]);
         } else {
-            // Regular step move - set to ONE LESS so step is not marked completed yet
+            // Regular step move
             $stmt = $pdo->prepare("UPDATE residence SET completedStep = :completedStep WHERE residenceID = :id");
-            $result = $stmt->execute(['completedStep' => $completedStep, 'id' => $id]);
-            $rowsAffected = $stmt->rowCount();
-            
-            error_log("========== MOVE RESIDENCE DEBUG ==========");
-            error_log("Residence ID: $id");
-            error_log("Target Step: $targetStep");
-            error_log("CompletedStep Set To: $completedStep");
-            error_log("Rows Affected: $rowsAffected");
-            error_log("SQL Executed: " . ($result ? 'SUCCESS' : 'FAILED'));
-            
-            // Verify the update
-            $verifyStmt = $pdo->prepare("SELECT residenceID, completedStep, passenger_name FROM residence WHERE residenceID = :id");
-            $verifyStmt->execute(['id' => $id]);
-            $updatedRecord = $verifyStmt->fetch(PDO::FETCH_ASSOC);
-            error_log("Verified Record After Update: " . json_encode($updatedRecord));
-            error_log("==========================================");
-            
-            if ($rowsAffected === 0) {
-                error_log("WARNING: No rows affected - residence ID $id might not exist!");
-                JWTHelper::sendResponse(404, false, 'Residence not found or no changes made');
-                return;
-            }
+            $stmt->execute(['completedStep' => $completedStep, 'id' => $id]);
         }
 
-        JWTHelper::sendResponse(200, true, 'Residence moved to step ' . $targetStep . ' successfully. It will appear in that step\'s list.');
+        JWTHelper::sendResponse(200, true, 'Residence moved to step ' . $targetStep . ' successfully');
     } catch (Exception $e) {
         error_log('moveResidenceToStep error: ' . $e->getMessage());
         JWTHelper::sendResponse(500, false, 'Error moving residence: ' . $e->getMessage());
