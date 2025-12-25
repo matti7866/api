@@ -1,0 +1,458 @@
+/* ============================================ */
+/*  PROFESSIONAL ANALYTICS DASHBOARD           */
+/* ============================================ */
+
+.dashboard-analytics {
+  padding: 16px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.dashboard-analytics .page-header {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slideInDown 0.8s ease;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================ */
+/*  CARD STYLING                               */
+/* ============================================ */
+
+.dashboard-analytics .card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: none;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation-fill-mode: backwards;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.dashboard-analytics .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-analytics .card-body {
+  padding: 16px;
+}
+
+.dashboard-analytics .card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-analytics .card-title i {
+  color: #dc2626;
+  font-size: 16px;
+}
+
+.dashboard-analytics h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.dashboard-analytics h4 i {
+  font-size: 14px;
+  margin-right: 6px;
+  color: #dc2626;
+}
+
+.dashboard-analytics h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.dashboard-analytics h6 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.dashboard-analytics .card.bg-light {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+  border: 2px solid rgba(220, 38, 38, 0.1);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.1);
+}
+
+.dashboard-analytics .card.bg-light:hover {
+  border-color: rgba(220, 38, 38, 0.3);
+  box-shadow: 0 12px 35px rgba(220, 38, 38, 0.15);
+}
+
+.dashboard-analytics .card.bg-light h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 8px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-analytics .card.bg-light h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+
+.dashboard-analytics .card.bg-light h6 {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================ */
+/*  BADGE STYLING                              */
+/* ============================================ */
+
+.dashboard-analytics .badge {
+  font-size: 11px;
+  padding: 4px 10px;
+  font-weight: 600;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dashboard-analytics .badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-analytics .badge.bg-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+.dashboard-analytics .badge.bg-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}
+
+.dashboard-analytics .badge.bg-secondary {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+}
+
+/* ============================================ */
+/*  FORM CONTROLS                              */
+/* ============================================ */
+
+.dashboard-analytics .form-select-sm {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  font-weight: 600;
+  color: #1a1a1a;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-analytics .form-select-sm:hover {
+  border-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+.dashboard-analytics .form-select-sm:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+  outline: none;
+}
+
+.dashboard-analytics .form-check-input {
+  width: 40px;
+  height: 20px;
+  cursor: pointer;
+  border: 1px solid #dc2626;
+  transition: all 0.3s ease;
+}
+
+.dashboard-analytics .form-check-input:checked {
+  background-color: #dc2626;
+  border-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.dashboard-analytics .form-check-label {
+  font-weight: 600;
+  color: #4b5563;
+  margin-left: 12px;
+}
+
+/* ============================================ */
+/*  BUTTON STYLING                             */
+/* ============================================ */
+
+.dashboard-analytics .btn-outline-primary {
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.15);
+}
+
+.dashboard-analytics .btn-outline-primary:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  border-color: #dc2626;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+.dashboard-analytics .btn-outline-primary i {
+  margin-right: 6px;
+  font-size: 11px;
+}
+
+/* ============================================ */
+/*  CHART CONTAINERS                           */
+/* ============================================ */
+
+.dashboard-analytics canvas {
+  border-radius: 8px;
+  padding: 8px;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  max-height: 250px;
+}
+
+/* ============================================ */
+/*  LOADING STATE                              */
+/* ============================================ */
+
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 24px;
+  animation: fadeIn 0.6s ease;
+}
+
+.loading-spinner-large {
+  width: 80px;
+  height: 80px;
+  border: 6px solid #f3f4f6;
+  border-top-color: #dc2626;
+  border-bottom-color: #991b1b;
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dashboard-loading p {
+  color: #1a1a1a;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================ */
+/*  SECTION SPACING                            */
+/* ============================================ */
+
+.dashboard-analytics .mb-4 {
+  margin-bottom: 16px !important;
+}
+
+.dashboard-analytics .mb-5 {
+  margin-bottom: 20px !important;
+}
+
+.dashboard-analytics .row {
+  margin-bottom: 12px;
+}
+
+/* ============================================ */
+/*  TEXT STYLING                               */
+/* ============================================ */
+
+.dashboard-analytics .text-center {
+  text-align: center;
+}
+
+.dashboard-analytics .text-muted {
+  color: #6b7280 !important;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dashboard-analytics .fw-bold {
+  font-weight: 700 !important;
+}
+
+.dashboard-analytics .d-flex {
+  display: flex;
+}
+
+.dashboard-analytics .justify-content-between {
+  justify-content: space-between;
+}
+
+.dashboard-analytics .justify-content-around {
+  justify-content: space-around;
+}
+
+.dashboard-analytics .align-items-center {
+  align-items: center;
+}
+
+/* ============================================ */
+/*  STAGGERED ANIMATION                        */
+/* ============================================ */
+
+.dashboard-analytics .card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.dashboard-analytics .card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dashboard-analytics .card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.dashboard-analytics .card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.dashboard-analytics .card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+/* ============================================ */
+/*  RESPONSIVE DESIGN                          */
+/* ============================================ */
+
+@media (max-width: 768px) {
+  .dashboard-analytics {
+    padding: 16px;
+  }
+
+  .dashboard-analytics .page-header {
+    font-size: 24px;
+  }
+
+  .dashboard-analytics .card-title {
+    font-size: 16px;
+  }
+
+  .dashboard-analytics .card-body {
+    padding: 20px;
+  }
+
+  .dashboard-analytics .card.bg-light h2 {
+    font-size: 36px;
+  }
+
+  .dashboard-analytics .badge {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .dashboard-analytics .form-check-input {
+    width: 42px;
+    height: 22px;
+  }
+}
+
+/* ============================================ */
+/*  GLASSMORPHISM EFFECT                       */
+/* ============================================ */
+
+.dashboard-analytics .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #dc2626 0%, #991b1b 50%, #dc2626 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+

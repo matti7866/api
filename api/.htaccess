@@ -1,0 +1,24 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Handle CORS preflight requests
+# Note: We still let PHP handle CORS to support credentials properly
+# But we ensure OPTIONS requests reach PHP
+
+# Set CORS headers via environment variables (as fallback)
+# PHP files should include cors-headers.php for proper CORS handling
+SetEnvIf Origin "^http(s)?://(localhost|127\.0\.0\.1):5174$" CORS_ORIGIN=$1
+
+# Don't interfere with OPTIONS - let PHP handle it
+
+
+
+
+
+
+
+
+
+
+
+

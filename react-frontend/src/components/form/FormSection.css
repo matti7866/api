@@ -1,0 +1,129 @@
+/* Modern Form Section Styles */
+
+.form-section {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  margin-bottom: 0.75rem;
+  overflow: visible;
+  border: 1px solid #e5e7eb;
+  border-left: none;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-section:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.form-section-header {
+  background: #2d353c;
+  padding: 0.75rem 1rem;
+  border-bottom: 3px solid #dc2626;
+  border-left: 4px solid #dc2626;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.1);
+}
+
+.form-section-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, rgba(220, 38, 38, 0.05) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.form-section-header.collapsible {
+  cursor: pointer;
+  user-select: none;
+}
+
+.form-section-header.collapsible:hover {
+  background: #242a30;
+  border-left-color: #ef4444;
+  border-bottom-color: #ef4444;
+}
+
+.form-section-title {
+  font-size: 1.03125rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.form-section-title i {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.collapse-icon {
+  color: #fff;
+  font-size: 0.9625rem;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.form-section-body {
+  padding: 1rem;
+  background: #fff;
+  animation: slideDown 0.3s ease-out;
+  overflow: visible;
+  position: relative;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-section-header {
+    padding: 1rem 1.25rem;
+  }
+  
+  .form-section-title {
+    font-size: 1.1rem;
+  }
+  
+  .form-section-body {
+    padding: 1.25rem 1rem;
+  }
+}
+

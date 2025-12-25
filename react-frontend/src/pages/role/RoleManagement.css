@@ -1,0 +1,314 @@
+.role-management-page {
+  padding: 12px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.role-management-page .card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.role-management-page .card-header {
+  padding: 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.role-management-page .card-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.role-management-page .card-body {
+  padding: 16px;
+}
+
+.role-management-page .form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.role-management-page .input-group {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+}
+
+.role-management-page .input-group-prepend {
+  display: flex;
+}
+
+.role-management-page .input-group-text {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-right: none;
+  padding: 10px 14px;
+  border-radius: 6px 0 0 6px;
+  color: #475569;
+}
+
+.role-management-page .input-group .form-control {
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+}
+
+.role-management-page .form-control {
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.role-management-page .form-control:focus {
+  outline: none;
+  border-color: #1f2937;
+  box-shadow: 0 0 0 3px rgba(31, 41, 55, 0.1);
+}
+
+.role-management-page .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.role-management-page .btn:hover {
+  transform: translateY(-1px);
+}
+
+.role-management-page .btn-dark {
+  background: #1f2937;
+  color: white;
+}
+
+.role-management-page .btn-dark:hover {
+  background: #111827;
+}
+
+.role-management-page .btn-dark:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.role-management-page .btn-sm {
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+}
+
+.role-management-page .table-section {
+  margin-top: 16px;
+}
+
+.role-management-page .table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.role-management-page .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.role-management-page .table thead {
+  background: #1f2937;
+  color: white;
+}
+
+.role-management-page .table thead th {
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+}
+
+.role-management-page .table tbody td,
+.role-management-page .table tbody th {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.role-management-page .table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.role-management-page .table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.role-management-page .text-danger {
+  color: #ef4444;
+}
+
+.role-management-page .me-1 {
+  margin-right: 4px;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 992px) {
+  .role-management-page {
+    padding: 10px;
+  }
+
+  .role-management-page .card-body {
+    padding: 14px;
+  }
+
+  .role-management-page .card-header {
+    padding: 14px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .role-management-page {
+    padding: 12px;
+  }
+
+  .role-management-page .card {
+    border-radius: 8px;
+  }
+
+  .role-management-page .card-header {
+    padding: 16px;
+  }
+
+  .role-management-page .card-header h1 {
+    font-size: 22px;
+  }
+
+  .role-management-page .card-body {
+    padding: 16px;
+  }
+
+  .role-management-page .form-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .role-management-page .input-group {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .role-management-page .input-group-text {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .role-management-page .form-control {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .role-management-page .btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+    justify-content: center;
+  }
+
+  .role-management-page .table-section {
+    margin-top: 20px;
+  }
+
+  .role-management-page .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 6px;
+  }
+
+  .role-management-page .table {
+    min-width: 600px;
+  }
+
+  .role-management-page .table thead th {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .role-management-page .table tbody td,
+  .role-management-page .table tbody th {
+    padding: 10px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .role-management-page .btn-sm {
+    padding: 6px 10px;
+  }
+
+  .role-management-page .btn-sm .fa-trash {
+    font-size: 18px !important;
+  }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 480px) {
+  .role-management-page {
+    padding: 8px;
+  }
+
+  .role-management-page .card-header {
+    padding: 12px;
+  }
+
+  .role-management-page .card-header h1 {
+    font-size: 20px;
+  }
+
+  .role-management-page .card-body {
+    padding: 12px;
+  }
+
+  .role-management-page .form-row {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .role-management-page .table {
+    min-width: 500px;
+  }
+
+  .role-management-page .table thead th {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .role-management-page .table tbody td,
+  .role-management-page .table tbody th {
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .role-management-page .table tbody td.text-capitalize {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+

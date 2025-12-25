@@ -1,0 +1,188 @@
+.residence-ledger-page {
+  padding: 30px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+.residence-ledger-page .card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: white;
+}
+
+.residence-ledger-page .card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border: none;
+}
+
+.residence-ledger-page .print-header {
+  background: #000000;
+  padding: 25px;
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 25px;
+}
+
+.residence-ledger-page .print-logo {
+  height: auto;
+  width: 100%;
+  max-width: 200px;
+  object-fit: contain;
+  background: transparent;
+  padding: 0;
+  display: block;
+}
+
+.residence-ledger-page .print-company-info {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.residence-ledger-page .print-customer-info {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.residence-ledger-page .print-customer-title {
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+}
+
+.residence-ledger-page .print-customer-detail {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.residence-ledger-page .table-responsive {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-top: 25px;
+}
+
+.residence-ledger-page table th {
+  background: #000000 !important;
+  color: white !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 12px 8px;
+  border: none;
+}
+
+.residence-ledger-page table tbody tr:nth-of-type(even) {
+  background-color: #f9fafb;
+}
+
+.residence-ledger-page table tbody tr:hover {
+  background-color: #f3f4f6;
+  transition: background-color 0.2s;
+}
+
+.residence-ledger-page .print-totals {
+  background: #000000;
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 30px;
+  color: white;
+}
+
+.residence-ledger-page .print-totals .print-total-row {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.residence-ledger-page .print-totals .print-outstanding {
+  color: #ffffff;
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.residence-ledger-page .print-totals hr {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media print {
+  /* Hide everything except the print area */
+  body * {
+    visibility: hidden;
+  }
+  
+  #printThisArea,
+  #printThisArea * {
+    visibility: visible;
+  }
+  
+  #printThisArea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white;
+    padding: 20px;
+  }
+  
+  .residence-ledger-page {
+    padding: 0;
+    background-color: white;
+  }
+  
+  .btn,
+  .no-print {
+    display: none !important;
+  }
+  
+  .card {
+    border: none;
+    box-shadow: none;
+    background: white;
+  }
+  
+  .card-body {
+    padding: 0;
+  }
+  
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .table th {
+    background-color: #dc3545 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  /* Ensure proper page breaks */
+  .table {
+    page-break-inside: auto;
+  }
+  
+  .table tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+

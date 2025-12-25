@@ -1,0 +1,566 @@
+/* Surprise Login Studio Design - OTP Version */
+
+.login-surprise-container {
+  min-height: 100vh !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1.5rem !important;
+  background: transparent !important;
+}
+
+/* Animated gradient background */
+.login-surprise-bg {
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(135deg, hsl(0 0% 5%) 0%, hsl(0 20% 10%) 50%, hsl(0 40% 15%) 100%) !important;
+  z-index: 0 !important;
+}
+
+/* Floating orbs */
+.login-surprise-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: float 6s ease-in-out infinite;
+}
+
+.login-surprise-orb-1 {
+  top: 5rem;
+  left: 5rem;
+  width: 18rem;
+  height: 18rem;
+  background: hsl(0 84% 55% / 0.2);
+}
+
+.login-surprise-orb-2 {
+  bottom: 5rem;
+  right: 5rem;
+  width: 24rem;
+  height: 24rem;
+  background: hsl(0 90% 50% / 0.2);
+  animation: float-delayed 8s ease-in-out infinite;
+}
+
+.login-surprise-orb-3 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: hsl(0 84% 55% / 0.1);
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Card wrapper */
+.login-surprise-card-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 480px !important;
+  height: auto !important;
+  animation: slide-up 0.8s ease-out !important;
+  z-index: 10 !important;
+}
+
+.login-surprise-card-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, hsl(0 84% 55% / 0.2), hsl(0 90% 50% / 0.2));
+  border-radius: 1.5rem;
+  filter: blur(20px);
+}
+
+.login-surprise-card {
+  position: relative !important;
+  background: hsl(0 0% 12% / 0.4) !important;
+  backdrop-filter: blur(32px) !important;
+  -webkit-backdrop-filter: blur(32px) !important;
+  border-radius: 1.5rem !important;
+  padding: 2.5rem 2rem !important;
+  box-shadow: 0 20px 60px hsl(0 0% 0% / 0.6) !important;
+  border: 1px solid hsl(0 0% 22% / 0.5) !important;
+  transition: all 0.3s ease;
+  width: 100% !important;
+  min-height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.login-surprise-card-expanded {
+  padding: 2.5rem 2rem !important;
+  min-height: auto !important;
+}
+
+/* Header */
+.login-surprise-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: fade-in 0.6s ease-out;
+}
+
+
+.login-surprise-logo-img {
+  width: 8rem;
+  height: auto;
+  max-height: 8rem;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-surprise-logo-fallback {
+  font-size: 4rem;
+  font-weight: bold;
+  color: hsl(0 0% 100%);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Staff picture and name */
+.login-surprise-staff-img {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: 3px solid hsl(0 84% 55%);
+  box-shadow: 0 0 30px hsl(0 84% 55% / 0.5);
+}
+
+.login-surprise-staff-fallback {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(0 84% 55%), hsl(0 100% 65%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: hsl(0 0% 100%);
+  border: 3px solid hsl(0 84% 55%);
+  box-shadow: 0 0 30px hsl(0 84% 55% / 0.5);
+}
+
+.login-surprise-staff-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(0 0% 98%);
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.login-surprise-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(to right, hsl(0 0% 98%), hsl(0 0% 98% / 0.7));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.login-surprise-subtitle {
+  color: hsl(0 0% 65%);
+  font-size: 1rem;
+}
+
+/* Error message */
+.login-surprise-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: hsl(0 84% 60% / 0.1);
+  border: 1px solid hsl(0 84% 60% / 0.3);
+  border-radius: 0.5rem;
+  color: hsl(0 84% 60%);
+  margin-bottom: 1.5rem;
+  animation: fade-in 0.3s ease-out;
+}
+
+.login-surprise-error i {
+  font-size: 1rem;
+}
+
+/* Success message */
+.login-surprise-success {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: hsl(142 76% 36% / 0.1);
+  border: 1px solid hsl(142 76% 36% / 0.3);
+  border-radius: 0.5rem;
+  color: hsl(142 76% 36%);
+  margin-bottom: 1.5rem;
+  animation: fade-in 0.3s ease-out;
+}
+
+.login-surprise-success i {
+  font-size: 1rem;
+}
+
+/* Form */
+.login-surprise-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Input group */
+.login-surprise-input-group {
+  position: relative;
+}
+
+.login-surprise-input-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, hsl(0 84% 55%), hsl(0 100% 65%));
+  border-radius: 0.75rem;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.login-surprise-input-glow-active {
+  opacity: 0.2;
+}
+
+.login-surprise-input-wrapper {
+  position: relative;
+}
+
+.login-surprise-input-icon {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 1.25rem;
+  color: hsl(0 0% 65%);
+  transition: color 0.3s ease;
+  pointer-events: none;
+}
+
+.login-surprise-input-icon-active {
+  color: hsl(0 84% 55%);
+}
+
+.login-surprise-input {
+  width: 100%;
+  height: 3.5rem;
+  padding-left: 3.5rem;
+  padding-right: 1.25rem;
+  background: hsl(0 0% 16% / 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid hsl(0 0% 22% / 0.5);
+  border-radius: 0.75rem;
+  color: hsl(0 0% 98%);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.login-surprise-input:focus {
+  outline: none;
+  border-color: hsl(0 84% 55%);
+  box-shadow: 0 0 0 3px hsl(0 84% 55% / 0.1);
+}
+
+.login-surprise-input::placeholder {
+  color: hsl(0 0% 65%);
+}
+
+.login-surprise-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* OTP Group */
+.login-surprise-otp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-surprise-otp-hint {
+  text-align: center;
+  color: hsl(0 0% 65%);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.login-surprise-otp-email {
+  color: hsl(0 84% 55%);
+  font-weight: 600;
+}
+
+.login-surprise-otp-container {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-surprise-otp-input {
+  width: 3.5rem;
+  height: 3.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: hsl(0 0% 16% / 0.5);
+  backdrop-filter: blur(8px);
+  border: 2px solid hsl(0 0% 22% / 0.5);
+  border-radius: 0.75rem;
+  color: hsl(0 0% 98%);
+  transition: all 0.3s ease;
+}
+
+.login-surprise-otp-input:focus {
+  outline: none;
+  border-color: hsl(0 84% 55%);
+  box-shadow: 0 0 0 3px hsl(0 84% 55% / 0.1);
+  transform: scale(1.05);
+}
+
+.login-surprise-otp-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form actions */
+.login-surprise-form-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.login-surprise-form-actions .login-surprise-submit {
+  flex: 1;
+}
+
+/* Submit button */
+.login-surprise-submit {
+  width: 100%;
+  height: 3.5rem;
+  background: linear-gradient(to right, hsl(0 84% 55%), hsl(0 100% 65%));
+  border: none;
+  border-radius: 0.75rem;
+  color: hsl(0 0% 100%);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px hsl(0 84% 55% / 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-surprise-submit:hover:not(:disabled) {
+  box-shadow: 0 0 60px hsl(0 84% 55% / 0.4);
+  transform: translateY(-2px);
+}
+
+.login-surprise-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-surprise-submit-secondary {
+  background: hsl(0 0% 20%) !important;
+  box-shadow: 0 4px 20px hsl(0 0% 0% / 0.3) !important;
+}
+
+.login-surprise-submit-secondary:hover:not(:disabled) {
+  background: hsl(0 0% 25%) !important;
+  box-shadow: 0 4px 20px hsl(0 0% 0% / 0.4) !important;
+}
+
+.login-surprise-submit-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.login-surprise-submit-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, hsl(0 100% 65%), hsl(0 84% 55%));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.login-surprise-submit:hover .login-surprise-submit-glow {
+  opacity: 1;
+}
+
+/* Footer */
+.login-surprise-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.login-surprise-footer p {
+  color: hsl(0 0% 65%);
+  font-size: 0.75rem;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(-5deg);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    filter: blur(40px);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(60px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-surprise-card-wrapper {
+    max-width: 95% !important;
+  }
+  
+  .login-surprise-card {
+    padding: 2rem 1.5rem !important;
+  }
+  
+  .login-surprise-title {
+    font-size: 1.5rem;
+  }
+  
+  .login-surprise-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .login-surprise-otp-input {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-surprise-container {
+    padding: 1rem !important;
+  }
+  
+  .login-surprise-card-wrapper {
+    max-width: 100% !important;
+  }
+  
+  .login-surprise-card {
+    padding: 1.5rem 1rem !important;
+    border-radius: 1rem !important;
+  }
+  
+  .login-surprise-title {
+    font-size: 1.25rem;
+  }
+  
+  .login-surprise-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .login-surprise-staff-img,
+  .login-surprise-staff-fallback {
+    width: 5rem;
+    height: 5rem;
+    font-size: 2rem;
+  }
+  
+  .login-surprise-staff-name {
+    font-size: 1rem;
+  }
+  
+  .login-surprise-orb-1,
+  .login-surprise-orb-2,
+  .login-surprise-orb-3 {
+    display: none;
+  }
+  
+  .login-surprise-otp-container {
+    gap: 0.5rem;
+  }
+  
+  .login-surprise-otp-input {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.125rem;
+  }
+  
+  .login-surprise-form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .login-surprise-input {
+    height: 3rem;
+    font-size: 0.9rem;
+  }
+  
+  .login-surprise-submit {
+    height: 3rem;
+    font-size: 1rem;
+  }
+}

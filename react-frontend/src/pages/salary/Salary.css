@@ -1,0 +1,161 @@
+.salary-container {
+  padding: 20px;
+  margin: 20px;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-header-custom {
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 8px 8px 0 0;
+  background: linear-gradient(to right, #999966, #666600);
+  color: white;
+}
+
+.card-header-custom h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.card-header-custom i {
+  color: white;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.bg-graident-lightcrimson {
+  background: #666600;
+  background: -webkit-linear-gradient(to right, #999966, #666600);
+  background: linear-gradient(to right, #999966, #666600);
+}
+
+.text-graident-lightcrimson {
+  color: #666600;
+}
+
+.custom-btn {
+  color: #666600;
+  border-color: #666600;
+}
+
+.custom-btn:hover {
+  color: #FFFFFF;
+  background-color: #999966;
+  border-color: #999966;
+}
+
+.avatar-sm {
+  width: 40px;
+  height: 40px;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.btn-purple {
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+  color: white;
+}
+
+.btn-purple:hover {
+  background-color: #5a36a3;
+  border-color: #5a36a3;
+  color: white;
+}
+
+.bg-purple {
+  background-color: #6f42c1 !important;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.modal {
+  z-index: 1050;
+}
+
+.modal-backdrop {
+  z-index: 1040;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+  display: block;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.badge {
+  padding: 0.35em 0.65em;
+  font-size: 0.875em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+
+.bg-success {
+  background-color: #198754 !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.text-success {
+  color: #198754 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.text-info {
+  color: #0dcaf0 !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.table-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.table-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.opacity-75 {
+  opacity: 0.75;
+}
+
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+

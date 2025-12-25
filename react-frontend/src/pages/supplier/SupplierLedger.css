@@ -1,0 +1,366 @@
+.supplier-ledger-page {
+  padding: 20px;
+  background: #fff;
+}
+
+.print-actions {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.print-actions .btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.print-actions .btn-secondary {
+  background: #6b7280;
+  color: #fff;
+}
+
+.print-actions .btn-secondary:hover {
+  background: #4b5563;
+}
+
+.print-actions .btn-danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+.print-actions .btn-danger:hover {
+  background: #dc2626;
+}
+
+.print-area {
+  background: #fff;
+  padding: 20px;
+}
+
+/* Header Section */
+.ledger-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.company-info {
+  flex: 1;
+}
+
+.logo-section {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  background: #000;
+  padding: 15px 20px;
+  border-radius: 8px;
+}
+
+.company-logo {
+  height: auto;
+  width: auto;
+  max-height: 150px;
+  max-width: 200px;
+  margin-right: 0;
+  object-fit: contain;
+  display: block;
+}
+
+.company-name {
+  font-family: 'Arizonia', cursive;
+  font-size: 50px;
+  color: #dc2626;
+  font-style: italic;
+  font-weight: bold;
+  margin: 0;
+}
+
+.company-details p {
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 0;
+}
+
+.company-title {
+  font-size: 20px;
+  margin-top: 3px;
+  margin-bottom: 0;
+}
+
+.company-details p:not(.company-title) {
+  font-size: 15px;
+}
+
+.supplier-info-box {
+  width: 350px;
+  margin-left: 20px;
+}
+
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #dc2626;
+  font-weight: bold;
+  margin-left: 47px;
+  margin-top: 20px;
+}
+
+.divider {
+  border: none;
+  width: 230px;
+  border-bottom: 2px solid black;
+  margin-left: 47px;
+}
+
+.supplier-info-box p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  margin-bottom: 0;
+  margin-left: 47px;
+}
+
+.date-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  margin-left: 47px;
+  font-weight: normal;
+}
+
+/* Table Section */
+.table-container {
+  margin: 30px 0;
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.ledger-table thead {
+  background: #dc2626;
+  color: #fff;
+}
+
+.ledger-table th {
+  padding: 12px 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.ledger-table tbody td {
+  padding: 10px 8px;
+  border: 1px solid #ddd;
+}
+
+.ledger-table tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.ledger-table tbody tr.payment-row td {
+  background-color: #6b7280;
+  color: white;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Totals Section */
+.totals-section {
+  margin-top: 30px;
+  padding-left: 33.33%;
+  background: #fff !important;
+  color: #000 !important;
+}
+
+.totals-section p,
+.totals-section span,
+.totals-section strong {
+  color: #000 !important;
+  background: transparent !important;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  background: #fff !important;
+  padding: 5px 0;
+}
+
+.total-row p,
+.total-row span,
+.total-row strong {
+  background: transparent !important;
+  color: #000 !important;
+}
+
+.total-label {
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0;
+  color: #000 !important;
+  background: #fff !important;
+}
+
+.total-label * {
+  color: #000 !important;
+  background: #fff !important;
+}
+
+.total-value {
+  font-size: 20px;
+  margin: 0;
+  color: #000 !important;
+  background: #fff !important;
+  text-align: right;
+}
+
+.total-value * {
+  color: #000 !important;
+  background: #fff !important;
+}
+
+.total-row.outstanding {
+  background: #fff !important;
+}
+
+.total-row.outstanding p,
+.total-row.outstanding span,
+.total-row.outstanding strong {
+  background: transparent !important;
+  color: #000 !important;
+}
+
+.total-row.outstanding .total-label,
+.total-row.outstanding .total-value {
+  font-size: 30px;
+  color: #000 !important;
+  background: transparent !important;
+}
+
+.total-row.outstanding .total-label p,
+.total-row.outstanding .total-label span,
+.total-row.outstanding .total-label strong,
+.total-row.outstanding .total-value p,
+.total-row.outstanding .total-value span,
+.total-row.outstanding .total-value strong {
+  color: #000 !important;
+  background: transparent !important;
+}
+
+.totals-section hr {
+  border: none;
+  border-top: 2px solid #000;
+  margin: 10px 0;
+  background: #fff !important;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .supplier-ledger-page {
+    padding: 0;
+  }
+  
+  .print-area {
+    padding: 10px;
+  }
+  
+  .ledger-table th {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: #dc2626 !important;
+    color: white !important;
+  }
+  
+  .ledger-table tbody tr:nth-of-type(odd) td {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  .ledger-table tbody tr.payment-row td {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: #6b7280 !important;
+    color: white !important;
+  }
+  
+  .totals-section {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  
+  .total-row {
+    background: #fff !important;
+  }
+  
+  .total-label,
+  .total-value {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .print-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .print-actions .btn {
+    width: 100%;
+  }
+  
+  .ledger-header {
+    flex-direction: column;
+  }
+  
+  .supplier-info-box {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 20px;
+  }
+  
+  .section-title,
+  .divider,
+  .supplier-info-box p,
+  .date-text {
+    margin-left: 0;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .totals-section {
+    padding-left: 0;
+  }
+}
+

@@ -1,0 +1,112 @@
+.establishments-page {
+  padding: 20px;
+}
+
+.establishments-page .widget {
+  position: relative;
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  overflow: hidden;
+}
+
+.establishments-page .widget-stats {
+  min-height: 120px;
+}
+
+.establishments-page .widget-stats .stats-icon {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.establishments-page .widget-stats .stats-info h4 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.establishments-page .widget-stats .stats-info p {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.establishments-page .bg-blue {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.establishments-page .bg-red {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.establishments-page .bg-purple {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.establishments-page .bg-green {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.establishments-page .card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.establishments-page .card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.establishments-page .card-body h5 {
+  color: #333;
+  font-weight: 600;
+}
+
+.establishments-page .card-body p {
+  color: #666;
+  font-size: 14px;
+}
+
+.establishments-page .card-body strong {
+  color: #333;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.establishments-page .custom-pagination {
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.establishments-page .custom-pagination .pagination {
+  margin: 0;
+}
+
+.establishments-page .custom-pagination .page-link {
+  color: #667eea;
+  border-color: #e0e0e0;
+  padding: 8px 16px;
+}
+
+.establishments-page .custom-pagination .page-item.active .page-link {
+  background-color: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.establishments-page .custom-pagination .page-link:hover {
+  background-color: #f5f5f5;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+
+
+

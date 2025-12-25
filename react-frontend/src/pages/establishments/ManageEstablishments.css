@@ -1,0 +1,544 @@
+.manage-establishments-page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* When Establishments component is embedded */
+.embedded-establishments-view {
+  margin-left: 250px; /* Account for sidebar */
+  padding: 10px;
+  min-height: calc(100vh - 54px);
+  width: calc(100% - 250px);
+}
+
+.embedded-establishments-view .establishments-page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.embedded-establishments-view .container-fluid {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.embedded-establishments-view .row {
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.embedded-establishments-view .row > [class*="col-"] {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* Reduce card margins when embedded */
+.embedded-establishments-view .card,
+.embedded-establishments-view .widget {
+  margin-bottom: 8px;
+}
+
+.embedded-establishments-view .table-responsive {
+  margin: 0;
+}
+
+.embedded-establishments-view .mb-4 {
+  margin-bottom: 0.5rem !important;
+}
+
+.embedded-establishments-view .mb-3 {
+  margin-bottom: 0.5rem !important;
+}
+
+.embedded-establishments-view .mb-2 {
+  margin-bottom: 0.25rem !important;
+}
+
+.embedded-establishments-view .mt-4 {
+  margin-top: 0.5rem !important;
+}
+
+.embedded-establishments-view .mt-3 {
+  margin-top: 0.5rem !important;
+}
+
+.embedded-establishments-view .py-5 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.embedded-establishments-view .py-4 {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+.embedded-establishments-view .widget {
+  padding: 15px;
+}
+
+.embedded-establishments-view .card-body {
+  padding: 12px;
+}
+
+.embedded-establishments-view .card-header {
+  padding: 10px 12px;
+}
+
+@media (max-width: 991px) {
+  .embedded-establishments-view {
+    margin-left: 0;
+    padding: 8px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .embedded-establishments-view {
+    padding: 5px;
+  }
+  
+  .embedded-establishments-view .widget {
+    padding: 10px;
+  }
+  
+  .embedded-establishments-view .card-body {
+    padding: 10px;
+  }
+}
+
+.manage-establishments-page .sidebar {
+  background: #2d353c !important;
+  position: fixed !important;
+  top: 54px !important; /* Match main sidebar top position */
+  left: 220px !important; /* Account for main sidebar actual width */
+  width: 250px !important;
+  height: calc(100vh - 54px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  z-index: 1010 !important;
+  padding: 15px 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+.sidebar-header {
+  padding: 0 15px 15px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 15px;
+}
+
+.sidebar-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sidebar-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  margin: 3px 0 0 0;
+  font-weight: 400;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav-item {
+  margin: 0;
+}
+
+.sidebar-nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+  font-weight: 400;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  border-left-color: #5b9bd5;
+}
+
+.sidebar-nav-link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-left-color: #5b9bd5;
+  font-weight: 500;
+}
+
+.sidebar-nav-link i {
+  width: 20px;
+  margin-right: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.nav-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: auto;
+  min-width: 24px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.sidebar-nav-link:hover .nav-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.sidebar-nav-link.active .nav-count {
+  background: #5b9bd5;
+  color: #fff;
+}
+
+.manage-establishments-page .main-content {
+  position: fixed !important;
+  left: 470px !important; /* 220px + 250px */
+  right: 0 !important;
+  top: 54px !important; /* Match sidebar top position */
+  bottom: 0 !important;
+  padding: 15px 15px 15px 10px !important;
+  margin: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background: #f5f5f5;
+}
+
+.manage-establishments-page .main-content .row {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.manage-establishments-page .main-content .col-md-6,
+.manage-establishments-page .main-content .col-lg-4,
+.manage-establishments-page .main-content .col-12,
+.manage-establishments-page .main-content [class*="col-"] {
+  margin: 0 !important;
+  padding: 0 0 20px 0 !important;
+  box-sizing: border-box;
+}
+
+.manage-establishments-page .main-content .col-md-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.manage-establishments-page .main-content .col-lg-4 {
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+}
+
+.manage-establishments-page .main-content .mb-4 {
+  margin-bottom: 1.5rem !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Container no longer used, removed */
+
+.manage-establishments-page .establishment-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  margin: 0 10px 0 0 !important;
+  overflow: hidden;
+  width: calc(100% - 10px) !important;
+  max-width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.manage-establishments-page .establishment-card .card-header-custom,
+.manage-establishments-page .establishment-card .card-body-custom {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.establishment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.card-header-custom {
+  background: linear-gradient(135deg, #000000 0%, #2c2c2c 100%);
+  color: white;
+  padding: 20px;
+  border: none;
+  border-bottom: 2px solid #dc3545;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.card-header-custom h5 {
+  font-size: 1rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  margin-bottom: 8px !important;
+  max-width: 100%;
+}
+
+.card-header-custom .d-flex {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.card-body-custom {
+  padding: 20px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.card-body-custom p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  margin-bottom: 8px;
+}
+
+.establishment-badge {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.mainland-badge {
+  background: linear-gradient(135deg, #2c2c2c 0%, #000000 100%);
+  color: white;
+  border: 1px solid white;
+}
+
+.freezone-badge {
+  background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+  color: white;
+  border: 1px solid white;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.manage-establishments-page .search-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  padding: 25px !important;
+  margin: 0 0 20px 0 !important;
+  border: 2px solid #dc3545;
+  width: 100%;
+}
+
+.missing-doc-indicator {
+  flex-shrink: 0;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.missing-docs-card {
+  border-left: 4px solid #dc3545 !important;
+  border: 2px solid #dc3545 !important;
+}
+
+.missing-docs-list {
+  background: #ffebee;
+  border: 2px solid #dc3545;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.missing-doc-item {
+  display: inline-block;
+  background: #dc3545;
+  color: white;
+  padding: 4px 8px;
+  margin: 2px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.btn-purple {
+  background: linear-gradient(135deg, #8B5A96 0%, #6A4C93 100%);
+  border: 1px solid #8B5A96;
+  color: white;
+  font-weight: 600;
+}
+
+.btn-purple:hover {
+  background: linear-gradient(135deg, #6A4C93 0%, #8B5A96 100%);
+  border: 1px solid #6A4C93;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 90, 150, 0.3);
+}
+
+/* Responsive styles matching main sidebar */
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    transition: left 0.3s ease;
+    top: 60px;
+    width: 250px;
+    height: calc(100vh - 60px);
+  }
+  
+  .sidebar.mobile-open {
+    left: 250px; /* Positioned next to main sidebar when open */
+  }
+  
+  .main-content {
+    margin-left: 250px; /* Only main sidebar width on tablet */
+    padding: 20px;
+  }
+  
+  .manage-establishments-page .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .manage-establishments-page .col-lg-3,
+  .manage-establishments-page .col-md-4 {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 0;
+  }
+  
+  .manage-establishments-page .col-lg-9,
+  .manage-establishments-page .col-md-8 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    margin-bottom: 15px;
+    border-radius: 4px;
+  }
+  
+  .sidebar-nav {
+    display: flex;
+    overflow-x: auto;
+    padding: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  
+  .sidebar-nav::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .sidebar-nav::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+  
+  .sidebar-nav-item {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+  
+  .sidebar-nav-link {
+    white-space: nowrap;
+    padding: 10px 15px;
+    font-size: 12px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .sidebar-nav-link:hover,
+  .sidebar-nav-link.active {
+    border-left: none;
+    border-bottom-color: #5b9bd5;
+  }
+  
+  .nav-count {
+    font-size: 10px;
+    padding: 2px 6px;
+    min-width: 20px;
+  }
+  
+  .main-content {
+    padding-left: 0;
+  }
+  
+  .manage-establishments-page {
+    padding: 15px;
+  }
+  
+  .search-container {
+    padding: 15px;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-group .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .btn-group .btn:last-child {
+    margin-bottom: 0;
+  }
+}
+
