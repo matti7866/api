@@ -18,6 +18,9 @@ Thumbs.db
 vendor/
 composer.phar
 
+# Generated local DB connection config (see .cursor/connection.template.php)
+/connection.php
+
 # Environment files
 .env
 .env.local
