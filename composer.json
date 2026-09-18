@@ -1,0 +1,13 @@
+{
+    "name": "selab-nadiry/snt-api",
+    "description": "SN Travels PHP API",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "firebase/php-jwt": "^7.0",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
